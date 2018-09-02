@@ -3,3 +3,7 @@
 .idea/
 .project
 bin/
+.DS_Store
+build
+target
+.gradle
