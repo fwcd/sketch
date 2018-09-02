@@ -11,7 +11,7 @@ import com.fwcd.fructose.swing.ResourceImage;
 import com.fwcd.sketch.canvas.SketchBoard;
 
 public class TextTool extends BasicSketchTool {
-	private static final ImageIcon ICON = new ResourceImage("/resources/textIcon.png").getAsIcon();
+	private static final ImageIcon ICON = new ResourceImage("/textIcon.png").getAsIcon();
 	
 	private final TextEditingTool editingTool = new TextEditingTool();
 	

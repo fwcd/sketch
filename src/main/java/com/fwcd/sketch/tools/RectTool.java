@@ -9,7 +9,7 @@ import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.ColoredRect;
 
 public class RectTool extends DrawTool<ColoredRect> {
-	private static final ImageIcon ICON = new ResourceImage("/resources/rectToolIcon.png").getAsIcon();
+	private static final ImageIcon ICON = new ResourceImage("/rectToolIcon.png").getAsIcon();
 	
 	@Override
 	public ImageIcon getIcon() {

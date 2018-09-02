@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.fwcd:Fructose:a6ebc3719c3d7a561377282079ee93492ecc95dc'
+    api 'com.github.fwcd:Fructose:a6ebc3719c3d7a561377282079ee93492ecc95dc'
     implementation 'com.google.code.gson:gson:2.6.2'
     testImplementation 'junit:junit:4.12'
 }

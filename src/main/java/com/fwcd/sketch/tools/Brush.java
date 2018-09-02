@@ -9,7 +9,7 @@ import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.ColoredPath;
 
 public class Brush extends DrawTool<ColoredPath> {
-	private static final ImageIcon ICON = new ResourceImage("/resources/brushIcon.png").getAsIcon();
+	private static final ImageIcon ICON = new ResourceImage("/brushIcon.png").getAsIcon();
 	private int precision = 0;
 	
 	public void setPrecision(int precision) {

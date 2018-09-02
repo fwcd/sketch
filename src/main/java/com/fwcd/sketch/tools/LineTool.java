@@ -9,7 +9,7 @@ import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.ColoredLine;
 
 public class LineTool extends DrawTool<ColoredLine> {
-	private static final ImageIcon ICON = new ResourceImage("/resources/lineToolIcon.png").getAsIcon();
+	private static final ImageIcon ICON = new ResourceImage("/lineToolIcon.png").getAsIcon();
 
 	@Override
 	public ImageIcon getIcon() {

@@ -14,7 +14,7 @@ import com.fwcd.sketch.canvas.SketchBoard;
 import com.fwcd.sketch.model.SketchItem;
 
 public class Eraser extends BasicSketchTool {
-	private static final ImageIcon ICON = new ResourceImage("/resources/eraserIcon.png").getAsIcon();
+	private static final ImageIcon ICON = new ResourceImage("/eraserIcon.png").getAsIcon();
 	
 	private boolean isActive = false;
 	private int radius = 1; // Radius is dynamically set based off eraser speed

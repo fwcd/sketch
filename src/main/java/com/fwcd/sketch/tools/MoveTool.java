@@ -15,7 +15,7 @@ import com.fwcd.sketch.canvas.SketchBoard;
 import com.fwcd.sketch.model.SketchItem;
 
 public class MoveTool extends BasicSketchTool {
-	private static final ImageIcon ICON = new ResourceImage("/resources/moveIcon.png").getAsIcon();
+	private static final ImageIcon ICON = new ResourceImage("/moveIcon.png").getAsIcon();
 	private Optional<MouseSelection> selection = Optional.empty();
 	private Optional<EditingTool<?>> editTool = Optional.empty();
 	
