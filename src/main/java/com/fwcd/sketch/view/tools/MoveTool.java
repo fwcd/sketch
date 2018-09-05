@@ -1,4 +1,4 @@
-package com.fwcd.sketch.tools;
+package com.fwcd.sketch.view.tools;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -9,12 +9,12 @@ import javax.swing.ImageIcon;
 
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
-import com.fwcd.sketch.canvas.MouseSelection;
-import com.fwcd.sketch.canvas.MultiItemSelection;
-import com.fwcd.sketch.canvas.SketchBoard;
+import com.fwcd.sketch.view.canvas.MouseSelection;
+import com.fwcd.sketch.view.canvas.MultiItemSelection;
+import com.fwcd.sketch.view.canvas.SketchBoardView;
 import com.fwcd.sketch.model.SketchItem;
 
-public class MoveTool extends BasicSketchTool {
+public class MoveTool implements SketchTool {
 	private static final ImageIcon ICON = new ResourceImage("/moveIcon.png").getAsIcon();
 	private Optional<MouseSelection> selection = Optional.empty();
 	private Optional<EditingTool<?>> editTool = Optional.empty();
@@ -25,7 +25,7 @@ public class MoveTool extends BasicSketchTool {
 	}
 	
 	@Override
-	public void onMouseDown(Vector2D pos, SketchBoard board) {
+	public void onMouseDown(Vector2D pos, SketchBoardView board) {
 		if (editTool.isPresent()) {
 			editTool.orElse(null).onMouseDown(pos, board);
 		} else if (!selection.isPresent()) {
@@ -37,7 +37,7 @@ public class MoveTool extends BasicSketchTool {
 	}
 
 	@Override
-	public void onMouseDrag(Vector2D pos, SketchBoard board) {
+	public void onMouseDrag(Vector2D pos, SketchBoardView board) {
 		if (editTool.isPresent()) {
 			editTool.orElse(null).onMouseDrag(pos, board);
 		} else {
@@ -47,7 +47,7 @@ public class MoveTool extends BasicSketchTool {
 	}
 
 	@Override
-	public void onMouseUp(Vector2D pos, SketchBoard board) {
+	public void onMouseUp(Vector2D pos, SketchBoardView board) {
 		if (editTool.isPresent()) {
 			editTool.orElse(null).onMouseUp(pos, board);
 		} else {
@@ -56,7 +56,7 @@ public class MoveTool extends BasicSketchTool {
 	}
 
 	@Override
-	public void onMouseClick(Vector2D pos, SketchBoard board) {
+	public void onMouseClick(Vector2D pos, SketchBoardView board) {
 		if (editTool.isPresent()) {
 			editTool.orElse(null).onMouseClick(pos, board);
 		} else {
@@ -65,7 +65,7 @@ public class MoveTool extends BasicSketchTool {
 	}
 
 	@Override
-	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoard board) {
+	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoardView board) {
 		if (editTool.isPresent()) {
 			editTool.orElse(null).render(g2d, canvasSize, board);
 		} else {
@@ -74,7 +74,7 @@ public class MoveTool extends BasicSketchTool {
 	}
 
 	@Override
-	public void onMouseDoubleClick(Vector2D pos, SketchBoard board) {
+	public void onMouseDoubleClick(Vector2D pos, SketchBoardView board) {
 		selection.ifPresent(sel -> {
 			MultiItemSelection items = sel.getItems();
 			if (!items.isEmpty()) {
@@ -83,7 +83,7 @@ public class MoveTool extends BasicSketchTool {
 				
 				if (editTool.isPresent()) {
 					this.editTool = editTool;
-					board.remove(item);
+					board.getModel().getItems().remove(item);
 					editTool.orElse(null).tryEditing(item);
 				}
 			}
@@ -92,16 +92,16 @@ public class MoveTool extends BasicSketchTool {
 	}
 
 	@Override
-	public void onKeyPress(KeyEvent e, SketchBoard board) {
+	public void onKeyPress(KeyEvent e, SketchBoardView board) {
 		if (editTool.isPresent()) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				editTool.ifPresent(tool -> board.add(tool.get(board)));
+				editTool.ifPresent(tool -> board.getModel().getItems().add(tool.get(board)));
 				editTool = Optional.empty();
 			} else {
 				editTool.orElse(null).onKeyPress(e, board);
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE) {
-			selection.ifPresent(sel -> sel.getItems().forEach(board::remove));
+			selection.ifPresent(sel -> sel.getItems().forEach(board.getModel().getItems()::remove));
 		} else 
 		board.repaint();
 	}

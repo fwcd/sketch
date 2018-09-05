@@ -7,7 +7,7 @@ import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Polygon2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.Rendereable;
-import com.fwcd.sketch.tools.EditingTool;
+import com.fwcd.sketch.view.tools.EditingTool;
 
 /**
  * Represents a CanvasItem.<br><br>

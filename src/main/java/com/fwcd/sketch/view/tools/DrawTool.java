@@ -1,21 +1,21 @@
-package com.fwcd.sketch.tools;
+package com.fwcd.sketch.view.tools;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.sketch.canvas.SketchBoard;
 import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.view.canvas.SketchBoardView;
 
-public abstract class DrawTool<T extends SketchItem> extends BasicSketchTool {
+public abstract class DrawTool<T extends SketchItem> implements SketchTool {
 	private T item = null;
 	private BrushProperties props;
 	private Vector2D start = null;
 	private Vector2D current = null;
 	
 	@Override
-	public void onMouseDown(Vector2D pos, SketchBoard drawBoard) {
+	public void onMouseDown(Vector2D pos, SketchBoardView drawBoard) {
 		start = pos;
 		current = pos;
 		props = drawBoard.getBrushProperties();
@@ -23,7 +23,7 @@ public abstract class DrawTool<T extends SketchItem> extends BasicSketchTool {
 	}
 
 	@Override
-	public void onMouseDrag(Vector2D pos, SketchBoard drawBoard) {
+	public void onMouseDrag(Vector2D pos, SketchBoardView drawBoard) {
 		T newItem = updateItem(item, start, current, pos);
 		
 		if (!newItem.equals(item)) {
@@ -33,8 +33,8 @@ public abstract class DrawTool<T extends SketchItem> extends BasicSketchTool {
 	}
 
 	@Override
-	public void onMouseUp(Vector2D pos, SketchBoard drawBoard) {
-		drawBoard.add(item);
+	public void onMouseUp(Vector2D pos, SketchBoardView drawBoard) {
+		drawBoard.getModel().getItems().add(item);
 		
 		start = null;
 		current = null;
@@ -50,7 +50,7 @@ public abstract class DrawTool<T extends SketchItem> extends BasicSketchTool {
 	protected abstract T updateItem(T item, Vector2D start, Vector2D last, Vector2D pos);
 
 	@Override
-	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoard drawBoard) {
+	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoardView board) {
 		if (item != null) {
 			item.render(g2d, canvasSize);
 		}

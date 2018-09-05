@@ -1,4 +1,4 @@
-package com.fwcd.sketch.tools;
+package com.fwcd.sketch.view.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,10 +10,10 @@ import javax.swing.ImageIcon;
 import com.fwcd.fructose.Pair;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
-import com.fwcd.sketch.canvas.SketchBoard;
 import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.view.canvas.SketchBoardView;
 
-public class Eraser extends BasicSketchTool {
+public class Eraser implements SketchTool {
 	private static final ImageIcon ICON = new ResourceImage("/eraserIcon.png").getAsIcon();
 	
 	private boolean isActive = false;
@@ -28,46 +28,46 @@ public class Eraser extends BasicSketchTool {
 	}
 
 	@Override
-	public void onMouseDown(Vector2D pos, SketchBoard drawBoard) {
+	public void onMouseDown(Vector2D pos, SketchBoardView board) {
 		isActive = true;
 		this.pos = pos;
 		
 		radius = 1;
 		
-		erase(drawBoard);
+		erase(board);
 	}
 
 	@Override
-	public void onMouseDrag(Vector2D pos, SketchBoard drawBoard) {
+	public void onMouseDrag(Vector2D pos, SketchBoardView board) {
 		lastPos = this.pos;
 		this.pos = pos;
 		
 		radius += (int) Math.signum((pos.sub(lastPos).length() * 5) - radius);
 		
-		erase(drawBoard);
+		erase(board);
 	}
 
 	@Override
-	public void onMouseUp(Vector2D pos, SketchBoard drawBoard) {
+	public void onMouseUp(Vector2D pos, SketchBoardView board) {
 		isActive = false;
 		pos = null;
 	}
 
-	private void erase(SketchBoard drawBoard) {
-		for (Pair<SketchItem, SketchItem> itemPair : drawBoard.getDecomposedItems()) {
+	private void erase(SketchBoardView board) {
+		for (Pair<SketchItem, SketchItem> itemPair : board.getModel().getDecomposedItems()) {
 			// SketchItem A is always the parent item, whilst
 			// SketchItem B may either be a (decomposed) sub-item or the parent item
 			//
 			// An example for a sub-item is a stroke inside a path
 			
 			if (pos.sub(itemPair.getRight().getPos()).length() < radius) { // TODO: Use hitboxes instead
-				drawBoard.remove(itemPair.getLeft());
+				board.getModel().getItems().remove(itemPair.getLeft());
 			}
 		}
 	}
 
 	@Override
-	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoard drawBoard) {
+	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoardView board) {
 		if (isActive) {
 			g2d.setColor(Color.LIGHT_GRAY);
 			g2d.setStroke(new BasicStroke(2));

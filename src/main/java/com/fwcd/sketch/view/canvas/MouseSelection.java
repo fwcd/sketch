@@ -1,4 +1,4 @@
-package com.fwcd.sketch.canvas;
+package com.fwcd.sketch.view.canvas;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,7 +15,7 @@ import com.fwcd.sketch.model.SketchItem;
 public class MouseSelection implements Rendereable {
 	private static final Color FRAME_COLOR = new Color(100, 100, 255, 80); // Transparent gray
 	
-	private final SketchBoard board;
+	private final SketchBoardView board;
 	private final MultiItemSelection items;
 	
 	private Vector2D startPos = null;
@@ -23,7 +23,7 @@ public class MouseSelection implements Rendereable {
 	
 	private boolean selecting = false;
 	
-	public MouseSelection(SketchBoard board) {
+	public MouseSelection(SketchBoardView board) {
 		this.board = board;
 		items = new MultiItemSelection(board);
 	}

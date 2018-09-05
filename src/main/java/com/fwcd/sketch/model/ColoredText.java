@@ -13,8 +13,8 @@ import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Polygon2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.sketch.tools.EditingTool;
-import com.fwcd.sketch.tools.TextEditingTool;
+import com.fwcd.sketch.view.tools.EditingTool;
+import com.fwcd.sketch.view.tools.TextEditingTool;
 
 public class ColoredText extends BasicSketchItem {
 	private static final long serialVersionUID = 48975483798754L;

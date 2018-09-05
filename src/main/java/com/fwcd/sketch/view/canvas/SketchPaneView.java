@@ -1,4 +1,4 @@
-package com.fwcd.sketch.canvas;
+package com.fwcd.sketch.view.canvas;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,25 +15,25 @@ import com.fwcd.fructose.geometry.Direction;
 import com.fwcd.fructose.swing.SelectedButtonPanel;
 import com.fwcd.fructose.swing.View;
 import com.fwcd.sketch.model.SketchBoardModel;
-import com.fwcd.sketch.tools.EnumSketchTool;
-import com.fwcd.sketch.tools.SketchTool;
+import com.fwcd.sketch.view.tools.EnumSketchTool;
+import com.fwcd.sketch.view.tools.SketchTool;
 import com.fwcd.sketch.utils.ColorButton;
 
-public class SketchPane implements View {
+public class SketchPaneView implements View {
 	private final JPanel view;
 	
-	private final SketchBoard board;
+	private final SketchBoardView board;
 	private final JToolBar toolBar;
 	
-	public SketchPane() {
+	public SketchPaneView() {
 		this(Direction.LEFT, false, Color.BLACK, Color.RED, Color.YELLOW, Color.BLUE);
 	}
 	
-	public SketchPane(Direction toolBarPos, boolean folding, Color... colors) {
+	public SketchPaneView(Direction toolBarPos, boolean folding, Color... colors) {
 		view = new JPanel();
 		view.setLayout(new BorderLayout());
 		
-		board = new SketchBoard();
+		board = new SketchBoardView(new SketchBoardModel());
 		view.add(board.getComponent(), BorderLayout.CENTER);
 		
 		boolean horizontal = toolBarPos == Direction.UP || toolBarPos == Direction.DOWN;
@@ -85,13 +85,5 @@ public class SketchPane implements View {
 	@Override
 	public JComponent getComponent() {
 		return view;
-	}
-
-	public void addChangeListener(Runnable listener) {
-		board.addChangeListener(listener);
-	}
-
-	public void setModel(SketchBoardModel model) {
-		board.setModel(model);
 	}
 }

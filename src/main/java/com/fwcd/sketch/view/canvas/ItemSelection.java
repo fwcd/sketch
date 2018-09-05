@@ -1,4 +1,4 @@
-package com.fwcd.sketch.canvas;
+package com.fwcd.sketch.view.canvas;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,11 +11,11 @@ import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.DashedStroke;
 import com.fwcd.fructose.swing.Rendereable;
 import com.fwcd.fructose.swing.SwingGraphics;
-import com.fwcd.sketch.canvas.ResizeHandle.HandlePosition;
+import com.fwcd.sketch.view.canvas.ResizeHandle.HandlePosition;
 import com.fwcd.sketch.model.SketchItem;
 
 public class ItemSelection implements Rendereable {
-	private final SketchBoard board;
+	private final SketchBoardView board;
 	private final List<ResizeHandle> resizeHandles = new ArrayList<>();
 
 	private SketchItem item;
@@ -24,7 +24,7 @@ public class ItemSelection implements Rendereable {
 	private Vector2D lastPos = null;
 	private ResizeHandle activeHandle = null;
 	
-	public ItemSelection(SketchItem item, SketchBoard board) {
+	public ItemSelection(SketchItem item, SketchBoardView board) {
 		this.board = board;
 		setItem(item);
 		
@@ -38,7 +38,7 @@ public class ItemSelection implements Rendereable {
 	}
 	
 	private void setItem(SketchItem item) {
-		board.modify(this.item, item);
+		board.getModel().replaceItem(this.item, item);
 		this.item = item;
 		boundingBox = item.getHitBox().getBoundingBox();
 		

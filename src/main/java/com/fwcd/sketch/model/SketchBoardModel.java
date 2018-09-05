@@ -1,75 +1,81 @@
 package com.fwcd.sketch.model;
 
 import java.awt.Color;
-import java.io.Serializable;
-import java.util.ArrayList;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Pair;
+import com.fwcd.fructose.structs.ObservableList;
+import com.fwcd.sketch.utils.PolymorphicSerializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
-public class SketchBoardModel implements Serializable {
-	private static final long serialVersionUID = 938798223123734L;
-	private Color background = Color.WHITE;
-	private final List<SketchItem> items = new ArrayList<>();
+public class SketchBoardModel {
+	private final Gson gson = new GsonBuilder()
+			.registerTypeAdapter(SketchItem.class, new PolymorphicSerializer<SketchItem>())
+			.create();
+	private final ObservableList<SketchItem> items = new ObservableList<>();
+	private final Observable<Color> background = new Observable<>(Color.WHITE);
+	private final Observable<Boolean> showGrid = new Observable<>(false);
+	private final Observable<Boolean> snapToGrid = new Observable<>(false);
+	private Iterable<Pair<SketchItem, SketchItem>> decomposedItems;
 	
-	private transient Iterable<Pair<SketchItem, SketchItem>> decomposedItems;
-
-	public void add(SketchItem item) {
-		items.add(item);
-		onChange();
+	{
+		items.listen(x -> {
+			decomposedItems = null;
+		});
 	}
 	
-	public void remove(SketchItem item) {
-		items.remove(item);
-		onChange();
-	}
+	public Observable<Color> getBackground() { return background; }
 	
-	public void replace(SketchItem item, SketchItem replacement) {
+	public ObservableList<SketchItem> getItems() { return items; }
+	
+	public Observable<Boolean> getShowGrid() { return showGrid;}
+	
+	public Observable<Boolean> getSnapToGrid() { return snapToGrid;}
+	
+	public void replaceItem(SketchItem item, SketchItem replacement) {
 		if (items.contains(item)) {
 			int index = items.indexOf(item);
-			items.remove(item);
-			items.add(index, replacement);
-			onChange();
+			items.set(index, replacement);
 		}
-	}
-	
-	public void clear() {
-		items.clear();
-		onChange();
-	}
-	
-	private void onChange() {
-		decomposedItems = null;
 	}
 
 	public Iterable<Pair<SketchItem, SketchItem>> getDecomposedItems() {
 		if (decomposedItems == null) {
 			decomposedItems = items.stream()
-					.flatMap(item -> {
-						if (item instanceof ComposedSketchItem) {
-							return ((ComposedSketchItem) item).decompose().stream()
-									.map(decomposed -> new Pair<>(item, decomposed));
-						} else {
-							return Stream.of(new Pair<>(item, item));
-						}
-					})
-					.collect(Collectors.toList());
+				.flatMap(item -> {
+					if (item instanceof ComposedSketchItem) {
+						return ((ComposedSketchItem) item).decompose().stream()
+								.map(decomposed -> new Pair<>(item, decomposed));
+					} else {
+						return Stream.of(new Pair<>(item, item));
+					}
+				})
+				.collect(Collectors.toList());
 		}
 		
 		return decomposedItems;
 	}
 	
-	public Iterable<SketchItem> getItems() {
-		return new ArrayList<>(items);
-	}
-
-	public void setBackground(Color background) {
-		this.background = background;
+	public String getItemsAsJSON() {
+		return gson.toJson(items.get());
 	}
 	
-	public Color getBackground() {
-		return background;
+	public void loadItemsFromJSON(String json) {
+		items.set(gson.fromJson(json, new TypeToken<List<SketchItem>>() {}.getType()));
+	}
+	
+	public void writeItemsAsJSON(Writer writer) {
+		gson.toJson(items.get(), writer);
+	}
+	
+	public void loadItemsFromJSON(Reader reader) {
+		items.set(gson.fromJson(reader, new TypeToken<List<SketchItem>>() {}.getType()));
 	}
 }

@@ -1,4 +1,4 @@
-package com.fwcd.sketch.canvas;
+package com.fwcd.sketch.view.canvas;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -14,9 +14,9 @@ import com.fwcd.sketch.model.SketchItem;
 
 public class MultiItemSelection implements Rendereable, Iterable<SketchItem> {
 	private final Map<SketchItem, ItemSelection> items = new HashMap<>();
-	private final SketchBoard board;
+	private final SketchBoardView board;
 	
-	public MultiItemSelection(SketchBoard board) {
+	public MultiItemSelection(SketchBoardView board) {
 		this.board = board;
 	}
 	
@@ -66,7 +66,7 @@ public class MultiItemSelection implements Rendereable, Iterable<SketchItem> {
 		for (SketchItem item : new ArrayList<>(items.keySet())) {
 			SketchItem modified = modifier.apply(item);
 			
-			board.modify(item, modified);
+			board.getModel().replaceItem(item, modified);
 			replace(item, modified);
 		}
 	}

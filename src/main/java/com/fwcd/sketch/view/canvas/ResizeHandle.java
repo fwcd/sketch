@@ -1,4 +1,4 @@
-package com.fwcd.sketch.canvas;
+package com.fwcd.sketch.view.canvas;
 
 import java.awt.Color;
 import java.awt.Dimension;

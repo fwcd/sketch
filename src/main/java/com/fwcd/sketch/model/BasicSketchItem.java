@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.sketch.tools.EditingTool;
+import com.fwcd.sketch.view.tools.EditingTool;
 
 public abstract class BasicSketchItem implements SketchItem {
 	private static final long serialVersionUID = 97843987534L;

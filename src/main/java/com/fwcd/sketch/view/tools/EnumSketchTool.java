@@ -1,4 +1,4 @@
-package com.fwcd.sketch.tools;
+package com.fwcd.sketch.view.tools;
 
 public enum EnumSketchTool {
 	MOVE(new MoveTool()),

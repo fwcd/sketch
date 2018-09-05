@@ -1,14 +1,14 @@
-package com.fwcd.sketch.tools;
+package com.fwcd.sketch.view.tools;
 
 import javax.swing.ImageIcon;
 
-import com.fwcd.sketch.canvas.SketchBoard;
+import com.fwcd.sketch.view.canvas.SketchBoardView;
 import com.fwcd.sketch.model.SketchItem;
 
-public abstract class EditingTool<T extends SketchItem> extends BasicSketchTool {
+public abstract class EditingTool<T extends SketchItem> implements SketchTool {
 	public abstract void edit(T item);
 	
-	public abstract T get(SketchBoard board);
+	public abstract T get(SketchBoardView board);
 	
 	@SuppressWarnings("unchecked")
 	public void tryEditing(SketchItem item) {

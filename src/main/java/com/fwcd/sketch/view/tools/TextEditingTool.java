@@ -1,4 +1,4 @@
-package com.fwcd.sketch.tools;
+package com.fwcd.sketch.view.tools;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.sketch.canvas.SketchBoard;
+import com.fwcd.sketch.view.canvas.SketchBoardView;
 import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.ColoredText;
 
@@ -22,8 +22,8 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 	}
 	
 	@Override
-	public ColoredText get(SketchBoard drawBoard) {
-		BrushProperties properties = drawBoard.getBrushProperties();
+	public ColoredText get(SketchBoardView board) {
+		BrushProperties properties = board.getBrushProperties();
 		ColoredText coloredText = new ColoredText(
 				text,
 				properties.getColor(),
@@ -34,27 +34,27 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 	}
 	
 	@Override
-	public void onMouseDown(Vector2D pos, SketchBoard drawBoard) {
+	public void onMouseDown(Vector2D pos, SketchBoardView board) {
 		this.pos = pos;
 	}
 
 	@Override
-	public void onMouseDrag(Vector2D pos, SketchBoard drawBoard) {
+	public void onMouseDrag(Vector2D pos, SketchBoardView board) {
 		this.pos = pos;
 	}
 
 	@Override
-	public void onMouseUp(Vector2D pos, SketchBoard drawBoard) {
-		drawBoard.getComponent().repaint();
+	public void onMouseUp(Vector2D pos, SketchBoardView board) {
+		board.getComponent().repaint();
 	}
 
 	@Override
-	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoard drawBoard) {
+	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoardView board) {
 		if (pos != null) {
 			g2d.setColor(Color.BLACK);
 			g2d.fillRect((int) pos.getX() - 5, (int) pos.getY() - 5, 10, 10);
 			
-			ColoredText coloredText = get(drawBoard);
+			ColoredText coloredText = get(board);
 			coloredText.render(g2d, canvasSize);
 			
 			FontMetrics metrics = g2d.getFontMetrics();
@@ -77,7 +77,7 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 	}
 	
 	@Override
-	public void onKeyPress(KeyEvent e, SketchBoard sketchBoard) {
+	public void onKeyPress(KeyEvent e, SketchBoardView sketchBoard) {
 		if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			if (text.length() > 0) {
 				text = text.substring(0, text.length() - 1);

@@ -1,4 +1,4 @@
-package com.fwcd.sketch.tools;
+package com.fwcd.sketch.view.tools;
 
 import javax.swing.ImageIcon;
 
