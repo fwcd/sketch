@@ -10,7 +10,7 @@ import com.fwcd.fructose.geometry.Square2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.Rendereable;
 import com.fwcd.fructose.swing.SwingGraphics;
-import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.model.items.SketchItem;
 
 public class ResizeHandle implements Rendereable {
 	public static enum Corner {

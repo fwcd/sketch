@@ -1,37 +1,45 @@
-package com.fwcd.sketch.model;
+package com.fwcd.sketch.model.items;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
 
 import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Polygon2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.fructose.swing.SwingGraphics;
+import com.fwcd.sketch.model.BrushProperties;
 
-public class ColoredRect implements SketchItem {
+public class ColoredRect implements ColoredSketchItem {
 	private static final long serialVersionUID = 48975483798754L;
 	private final Rectangle2D rect;
 	private final Color color;
-	private final float brushThickness;
+	private final float thickness;
 	
-	public ColoredRect(Rectangle2D rect, Color color, float brushThickness) {
+	public ColoredRect(Rectangle2D rect, Color color, float thickness) {
 		this.rect = rect;
 		this.color = color;
-		this.brushThickness = brushThickness;
+		this.thickness = thickness;
 	}
 	
 	public ColoredRect(Rectangle2D rect, BrushProperties props) {
 		this(rect, props.getColor(), props.getThicknessProperty().getValue());
 	}
 
+	public Rectangle2D getRect() {
+		return rect;
+	}
+	
 	@Override
-	public void render(Graphics2D g2d, Dimension canvasSize) {
-		g2d.setColor(color);
-		g2d.setStroke(new BasicStroke(brushThickness));
-		rect.draw(new SwingGraphics(g2d));
+	public void accept(SketchItemVisitor visitor) {
+		visitor.visitRect(this);
+	}
+	
+	public float getThickness() {
+		return thickness;
+	}
+	
+	@Override
+	public Color getColor() {
+		return color;
 	}
 
 	@Override
@@ -46,16 +54,16 @@ public class ColoredRect implements SketchItem {
 
 	@Override
 	public ColoredRect movedBy(Vector2D delta) {
-		return new ColoredRect(rect.movedBy(delta), color, brushThickness);
+		return new ColoredRect(rect.movedBy(delta), color, thickness);
 	}
 
 	@Override
 	public ColoredRect transformedBy(DoubleMatrix transform) {
-		return new ColoredRect(rect.transformedBy(transform), color, brushThickness);
+		return new ColoredRect(rect.transformedBy(transform), color, thickness);
 	}
 
 	@Override
 	public ColoredRect resizedBy(Vector2D delta) {
-		return new ColoredRect(rect.resizedBy(delta), color, brushThickness);
+		return new ColoredRect(rect.resizedBy(delta), color, thickness);
 	}
 }

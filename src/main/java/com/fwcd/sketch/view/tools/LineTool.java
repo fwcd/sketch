@@ -6,7 +6,7 @@ import com.fwcd.fructose.geometry.LineSeg2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
 import com.fwcd.sketch.model.BrushProperties;
-import com.fwcd.sketch.model.ColoredLine;
+import com.fwcd.sketch.model.items.ColoredLine;
 
 public class LineTool extends DrawTool<ColoredLine> {
 	private static final ImageIcon ICON = new ResourceImage("/lineToolIcon.png").getAsIcon();

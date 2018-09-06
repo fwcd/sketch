@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Pair;
 import com.fwcd.fructose.structs.ObservableList;
+import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.utils.PolymorphicSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

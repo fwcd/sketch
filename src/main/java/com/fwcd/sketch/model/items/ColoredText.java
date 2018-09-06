@@ -1,10 +1,8 @@
-package com.fwcd.sketch.model;
+package com.fwcd.sketch.model.items;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Graphics2D;
 import java.util.Optional;
 
 import javax.swing.JLabel;
@@ -16,21 +14,21 @@ import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.sketch.view.tools.EditingTool;
 import com.fwcd.sketch.view.tools.TextEditingTool;
 
-public class ColoredText implements SketchItem {
+public class ColoredText implements ColoredSketchItem {
 	private static final long serialVersionUID = 48975483798754L;
 	private static final JLabel FAKE_LABEL = new JLabel(); // Hacky approach to deal with font metrics
 	
 	private final TextEditingTool editingTool = new TextEditingTool();
 	private final String[] text;
 	private final Color color;
-	private final float brushThickness;
+	private final float size;
 	private final Vector2D pos;
 	
 	private Vector2D lastLinePos;
 	
 	private transient Rectangle2D hitBox;
 	
-	public ColoredText(String text, Color color, float brushThickness, Vector2D pos) {
+	public ColoredText(String text, Color color, float size, Vector2D pos) {
 		if (text == null || text.length() == 0) {
 			this.text = new String[] {""};
 		} else {
@@ -38,52 +36,37 @@ public class ColoredText implements SketchItem {
 		}
 		
 		this.color = color;
-		this.brushThickness = brushThickness;
+		this.size = size;
 		this.pos = pos;
 	}
 	
-	private ColoredText(String[] text, Color color, float brushThickness, Vector2D pos) {
+	private ColoredText(String[] text, Color color, float size, Vector2D pos) {
 		this.text = text;
 		this.color = color;
-		this.brushThickness = brushThickness;
+		this.size = size;
 		this.pos = pos;
 	}
 
-	@Override
-	public void render(Graphics2D g2d, Dimension canvasSize) {
-		g2d.setColor(color);
-		g2d.setFont(getFont(g2d));
-		
-		int lineHeight = g2d.getFontMetrics().getHeight();
-		int x = (int) pos.getX();
-		int y = (int) pos.getY();
-		int lastY = y;
-		
-		for (int line=0; line<lines(); line++) {
-			lastY = y;
-			
-			g2d.drawString(text[line], x, y);
-			
-			y += lineHeight;
-		}
-		
-		lastLinePos = new Vector2D(x, lastY);
-	}
-
-	private Font getFont(Graphics2D g2d) {
-		return getFont(g2d.getFont());
+	public float getSize() {
+		return size;
 	}
 	
-	private Font getFont(Font defaultFont) {
-		return new Font(
-				defaultFont.getFontName(),
-				Font.PLAIN,
-				(int) brushThickness * 8
-		);
+	@Override
+	public Color getColor() {
+		return color;
 	}
-
+	
+	public void setLastLinePos(Vector2D lastLinePos) {
+		this.lastLinePos = lastLinePos;
+	}
+	
 	public Vector2D getLastLinePos() {
 		return lastLinePos;
+	}
+	
+	@Override
+	public void accept(SketchItemVisitor visitor) {
+		visitor.visitText(this);
 	}
 	
 	@Override
@@ -91,7 +74,15 @@ public class ColoredText implements SketchItem {
 		return pos;
 	}
 	
-	public int lines() {
+	public Font getFont(Font base) {
+		return new Font(
+			base.getFontName(),
+			Font.PLAIN,
+			(int) size * 8
+		);
+	}
+	
+	public int lineCount() {
 		return text.length;
 	}
 
@@ -149,7 +140,7 @@ public class ColoredText implements SketchItem {
 
 	@Override
 	public ColoredText movedBy(Vector2D delta) {
-		return new ColoredText(text, color, brushThickness, pos.add(delta));
+		return new ColoredText(text, color, size, pos.add(delta));
 	}
 
 	@Override

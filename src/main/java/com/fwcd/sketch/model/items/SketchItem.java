@@ -1,4 +1,4 @@
-package com.fwcd.sketch.model;
+package com.fwcd.sketch.model.items;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -7,19 +7,12 @@ import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Polygon2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.fructose.swing.Rendereable;
 import com.fwcd.sketch.view.tools.EditingTool;
 
 /**
- * Represents a CanvasItem.<br><br>
- * 
- * <b>NOTE that all
- * implementations MUST be immutable!!</b>
- * 
- * @author Fredrik
- *
+ * Represents an immutable item on a SketchBoard.
  */
-public interface SketchItem extends Rendereable, Serializable {
+public interface SketchItem extends Serializable {
 	Polygon2D getHitBox();
 	
 	Vector2D getPos();
@@ -27,6 +20,8 @@ public interface SketchItem extends Rendereable, Serializable {
 	SketchItem movedBy(Vector2D delta);
 	
 	SketchItem transformedBy(DoubleMatrix transform);
+	
+	void accept(SketchItemVisitor visitor);
 	
 	default SketchItem resizedBy(Vector2D delta) {
 		Rectangle2D hb = getHitBox().getBoundingBox();

@@ -10,7 +10,7 @@ import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.Rendereable;
 import com.fwcd.fructose.swing.SwingGraphics;
-import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.model.items.SketchItem;
 
 public class MouseSelection implements Rendereable {
 	private static final Color FRAME_COLOR = new Color(100, 100, 255, 80); // Transparent gray

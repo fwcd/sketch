@@ -10,7 +10,7 @@ import java.util.function.UnaryOperator;
 
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.Rendereable;
-import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.model.items.SketchItem;
 
 public class MultiItemSelection implements Rendereable, Iterable<SketchItem> {
 	private final Map<SketchItem, ItemSelection> items = new HashMap<>();

@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import com.fwcd.fructose.Pair;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
-import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
 
 public class Eraser implements SketchTool {

@@ -21,11 +21,11 @@ import com.fwcd.fructose.Pair;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.MouseHandler;
 import com.fwcd.fructose.swing.RenderPanel;
-import com.fwcd.fructose.swing.Rendereable;
 import com.fwcd.fructose.swing.View;
 import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.SketchBoardModel;
-import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.model.items.SketchItem;
+import com.fwcd.sketch.model.items.SketchItemVisitor;
 import com.fwcd.sketch.view.tools.EnumSketchTool;
 import com.fwcd.sketch.view.tools.Eraser;
 import com.fwcd.sketch.view.tools.SketchTool;
@@ -183,8 +183,9 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 			}
 		}
 		
-		for (Rendereable item : model.getItems()) {
-			item.render(g2d, canvasSize);
+		SketchItemVisitor renderer = new ItemRenderer(g2d);
+		for (SketchItem item : model.getItems()) {
+			item.accept(renderer);
 		}
 	}
 

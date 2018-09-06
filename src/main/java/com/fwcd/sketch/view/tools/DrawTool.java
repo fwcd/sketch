@@ -5,7 +5,8 @@ import java.awt.Graphics2D;
 
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.sketch.model.BrushProperties;
-import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.model.items.SketchItem;
+import com.fwcd.sketch.view.canvas.ItemRenderer;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
 
 public abstract class DrawTool<T extends SketchItem> implements SketchTool {
@@ -52,7 +53,7 @@ public abstract class DrawTool<T extends SketchItem> implements SketchTool {
 	@Override
 	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoardView board) {
 		if (item != null) {
-			item.render(g2d, canvasSize);
+			item.accept(new ItemRenderer(g2d));
 		}
 	}
 }

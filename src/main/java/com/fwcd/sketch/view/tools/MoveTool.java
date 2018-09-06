@@ -12,7 +12,7 @@ import com.fwcd.fructose.swing.ResourceImage;
 import com.fwcd.sketch.view.canvas.MouseSelection;
 import com.fwcd.sketch.view.canvas.MultiItemSelection;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
-import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.model.items.SketchItem;
 
 public class MoveTool implements SketchTool {
 	private static final ImageIcon ICON = new ResourceImage("/moveIcon.png").getAsIcon();

@@ -6,7 +6,7 @@ import com.fwcd.fructose.geometry.LineSeg2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
 import com.fwcd.sketch.model.BrushProperties;
-import com.fwcd.sketch.model.ColoredPath;
+import com.fwcd.sketch.model.items.ColoredPath;
 
 public class Brush extends DrawTool<ColoredPath> {
 	private static final ImageIcon ICON = new ResourceImage("/brushIcon.png").getAsIcon();

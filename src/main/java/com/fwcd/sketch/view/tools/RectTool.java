@@ -6,7 +6,7 @@ import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
 import com.fwcd.sketch.model.BrushProperties;
-import com.fwcd.sketch.model.ColoredRect;
+import com.fwcd.sketch.model.items.ColoredRect;
 
 public class RectTool extends DrawTool<ColoredRect> {
 	private static final ImageIcon ICON = new ResourceImage("/rectToolIcon.png").getAsIcon();

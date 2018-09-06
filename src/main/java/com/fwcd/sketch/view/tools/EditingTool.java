@@ -3,7 +3,7 @@ package com.fwcd.sketch.view.tools;
 import javax.swing.ImageIcon;
 
 import com.fwcd.sketch.view.canvas.SketchBoardView;
-import com.fwcd.sketch.model.SketchItem;
+import com.fwcd.sketch.model.items.SketchItem;
 
 public abstract class EditingTool<T extends SketchItem> implements SketchTool {
 	public abstract void edit(T item);

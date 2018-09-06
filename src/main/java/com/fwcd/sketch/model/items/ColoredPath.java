@@ -1,9 +1,6 @@
-package com.fwcd.sketch.model;
+package com.fwcd.sketch.model.items;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,19 +11,20 @@ import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.LineSeg2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.fructose.swing.SwingGraphics;
+import com.fwcd.sketch.model.BrushProperties;
+import com.fwcd.sketch.model.ComposedSketchItem;
 
-public class ColoredPath implements ComposedSketchItem {
+public class ColoredPath implements ComposedSketchItem, ColoredSketchItem {
 	private static final long serialVersionUID = 98734979343455L;
 	private final List<LineSeg2D> lines;
 	private final Color color;
-	private final float brushThickness;
+	private final float thickness;
 	private Rectangle2D hitBox;
 
-	public ColoredPath(List<LineSeg2D> lines, Color color, float brushThickness) {
+	public ColoredPath(List<LineSeg2D> lines, Color color, float thickness) {
 		this.lines = lines;
 		this.color = color;
-		this.brushThickness = brushThickness;
+		this.thickness = thickness;
 	}
 	
 	public ColoredPath(List<LineSeg2D> lines, BrushProperties props) {
@@ -40,17 +38,25 @@ public class ColoredPath implements ComposedSketchItem {
 	public ColoredPath withLine(LineSeg2D line) {
 		List<LineSeg2D> newLines = new ArrayList<>(lines);
 		newLines.add(line);
-		return new ColoredPath(newLines, color, brushThickness);
+		return new ColoredPath(newLines, color, thickness);
+	}
+	
+	public float getThickness() {
+		return thickness;
+	}
+	
+	public List<LineSeg2D> getLines() {
+		return lines;
 	}
 	
 	@Override
-	public void render(Graphics2D g2d, Dimension canvasSize) {
-		g2d.setColor(color);
-		g2d.setStroke(new BasicStroke(brushThickness));
+	public void accept(SketchItemVisitor visitor) {
+		visitor.visitPath(this);
+	}
 	
-		for (LineSeg2D line : lines) {
-			line.fill(new SwingGraphics(g2d));
-		}
+	@Override
+	public Color getColor() {
+		return color;
 	}
 
 	@Override
@@ -81,7 +87,7 @@ public class ColoredPath implements ComposedSketchItem {
 	@Override
 	public Collection<SketchItem> decompose() {
 		return lines.stream()
-				.map(line -> new ColoredLine(line, color, brushThickness))
+				.map(line -> new ColoredLine(line, color, thickness))
 				.collect(Collectors.toList());
 	}
 
@@ -92,7 +98,7 @@ public class ColoredPath implements ComposedSketchItem {
 						.map(line -> line.movedBy(delta))
 						.collect(Collectors.toList()),
 				color,
-				brushThickness
+				thickness
 		);
 	}
 
@@ -103,7 +109,7 @@ public class ColoredPath implements ComposedSketchItem {
 						.map(line -> line.transformedBy(transform))
 						.collect(Collectors.toList()),
 				color,
-				brushThickness
+				thickness
 		);
 	}
 }

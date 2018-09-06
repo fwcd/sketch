@@ -7,9 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.sketch.view.canvas.SketchBoardView;
 import com.fwcd.sketch.model.BrushProperties;
-import com.fwcd.sketch.model.ColoredText;
+import com.fwcd.sketch.model.items.ColoredText;
+import com.fwcd.sketch.view.canvas.ItemRenderer;
+import com.fwcd.sketch.view.canvas.SketchBoardView;
 
 public class TextEditingTool extends EditingTool<ColoredText> {
 	private Vector2D pos;
@@ -55,7 +56,7 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 			g2d.fillRect((int) pos.getX() - 5, (int) pos.getY() - 5, 10, 10);
 			
 			ColoredText coloredText = get(board);
-			coloredText.render(g2d, canvasSize);
+			coloredText.accept(new ItemRenderer(g2d));
 			
 			FontMetrics metrics = g2d.getFontMetrics();
 			Vector2D cursorPos = coloredText
