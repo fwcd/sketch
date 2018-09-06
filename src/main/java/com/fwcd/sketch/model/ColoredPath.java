@@ -16,7 +16,7 @@ import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.SwingGraphics;
 
-public class ColoredPath extends BasicSketchItem implements ComposedSketchItem {
+public class ColoredPath implements ComposedSketchItem {
 	private static final long serialVersionUID = 98734979343455L;
 	private final List<LineSeg2D> lines;
 	private final Color color;

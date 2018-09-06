@@ -11,7 +11,7 @@ import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.SwingGraphics;
 
-public class ColoredRect extends BasicSketchItem {
+public class ColoredRect implements SketchItem {
 	private static final long serialVersionUID = 48975483798754L;
 	private final Rectangle2D rect;
 	private final Color color;

@@ -12,7 +12,7 @@ import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.SwingGraphics;
 
-public class ColoredLine extends BasicSketchItem {
+public class ColoredLine implements SketchItem {
 	private static final long serialVersionUID = 48975483798754L;
 	private final LineSeg2D line;
 	private final Color color;

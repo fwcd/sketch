@@ -16,7 +16,7 @@ import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.sketch.view.tools.EditingTool;
 import com.fwcd.sketch.view.tools.TextEditingTool;
 
-public class ColoredText extends BasicSketchItem {
+public class ColoredText implements SketchItem {
 	private static final long serialVersionUID = 48975483798754L;
 	private static final JLabel FAKE_LABEL = new JLabel(); // Hacky approach to deal with font metrics
 	
