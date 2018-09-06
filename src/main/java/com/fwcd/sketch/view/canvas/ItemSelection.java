@@ -11,7 +11,6 @@ import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.DashedStroke;
 import com.fwcd.fructose.swing.Rendereable;
 import com.fwcd.fructose.swing.SwingGraphics;
-import com.fwcd.sketch.view.canvas.ResizeHandle.HandlePosition;
 import com.fwcd.sketch.model.SketchItem;
 
 public class ItemSelection implements Rendereable {
@@ -28,8 +27,8 @@ public class ItemSelection implements Rendereable {
 		this.board = board;
 		setItem(item);
 		
-		for (HandlePosition handlePos : HandlePosition.values()) {
-			resizeHandles.add(new ResizeHandle(boundingBox, handlePos));
+		for (ResizeHandle.Corner corner : ResizeHandle.Corner.values()) {
+			resizeHandles.add(new ResizeHandle(boundingBox, corner));
 		}
 	}
 	

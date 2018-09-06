@@ -13,7 +13,7 @@ import com.fwcd.fructose.swing.SwingGraphics;
 import com.fwcd.sketch.model.SketchItem;
 
 public class ResizeHandle implements Rendereable {
-	public static enum HandlePosition {
+	public static enum Corner {
 		TOP_LEFT(Rectangle2D::getTopLeft),
 		TOP_RIGHT(Rectangle2D::getTopRight),
 		BOTTOM_LEFT(Rectangle2D::getBottomLeft),
@@ -21,7 +21,7 @@ public class ResizeHandle implements Rendereable {
 		
 		private final Function<Rectangle2D, Vector2D> vecFunc;
 		
-		private HandlePosition(Function<Rectangle2D, Vector2D> vecFunc) {
+		private Corner(Function<Rectangle2D, Vector2D> vecFunc) {
 			this.vecFunc = vecFunc;
 		}
 		
@@ -31,16 +31,16 @@ public class ResizeHandle implements Rendereable {
 	}
 	
 	private final int sideLength = 10;
-	private final HandlePosition handlePos;
+	private final Corner corner;
 	private Square2D frame;
 	
-	public ResizeHandle(Rectangle2D itemBoundingBox, HandlePosition handlePos) {
-		this.handlePos = handlePos;
+	public ResizeHandle(Rectangle2D itemBoundingBox, Corner corner) {
+		this.corner = corner;
 		update(itemBoundingBox);
 	}
 
 	public void update(Rectangle2D itemBoundingBox) {
-		moveTo(handlePos.getPos(itemBoundingBox));
+		moveTo(corner.getPos(itemBoundingBox));
 	}
 	
 	public void moveTo(Vector2D pos) {
@@ -61,26 +61,23 @@ public class ResizeHandle implements Rendereable {
 		moveTo(pos);
 		Vector2D diff = pos.sub(lastPos);
 		
-		switch (handlePos) {
-		
-		case BOTTOM_LEFT:
-			return item
+		switch (corner) {
+			case BOTTOM_LEFT:
+				return item
 					.movedBy(diff.withoutY())
 					.resizedBy(diff.invertX());
-		case BOTTOM_RIGHT:
-			return item
+			case BOTTOM_RIGHT:
+				return item
 					.resizedBy(diff);
-		case TOP_LEFT:
-			return item
+			case TOP_LEFT:
+				return item
 					.movedBy(diff)
 					.resizedBy(diff.invert());
-		case TOP_RIGHT:
-			return item
+			case TOP_RIGHT:
+				return item
 					.movedBy(diff.withoutX())
 					.resizedBy(diff.invertY());
-		default:
-			throw new RuntimeException("Invalid handle position!");
-		
+			default: throw new RuntimeException("Invalid handle position!");
 		}
 	}
 }
