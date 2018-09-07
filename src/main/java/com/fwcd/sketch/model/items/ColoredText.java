@@ -3,7 +3,6 @@ package com.fwcd.sketch.model.items;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.util.Optional;
 
 import javax.swing.JLabel;
 
@@ -11,14 +10,11 @@ import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Polygon2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.sketch.view.tools.EditingTool;
-import com.fwcd.sketch.view.tools.TextEditingTool;
 
 public class ColoredText implements ColoredSketchItem {
 	private static final long serialVersionUID = 48975483798754L;
 	private static final JLabel FAKE_LABEL = new JLabel(); // Hacky approach to deal with font metrics
 	
-	private final TextEditingTool editingTool = new TextEditingTool();
 	private final String[] text;
 	private final Color color;
 	private final float size;
@@ -147,10 +143,5 @@ public class ColoredText implements ColoredSketchItem {
 	public ColoredText transformedBy(DoubleMatrix transform) {
 		// TODO: Implement text resizing (by changing font size proportionally?)
 		return this;
-	}
-
-	@Override
-	public Optional<EditingTool<?>> getEditingTool() {
-		return Optional.of(editingTool);
 	}
 }

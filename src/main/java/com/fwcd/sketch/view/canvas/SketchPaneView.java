@@ -25,15 +25,15 @@ public class SketchPaneView implements View {
 	private final SketchBoardView board;
 	private final JToolBar toolBar;
 	
-	public SketchPaneView() {
-		this(Direction.LEFT, false, Color.BLACK, Color.RED, Color.YELLOW, Color.BLUE);
+	public SketchPaneView(SketchBoardModel model) {
+		this(model, Direction.LEFT, false, Color.BLACK, Color.RED, Color.YELLOW, Color.BLUE);
 	}
 	
-	public SketchPaneView(Direction toolBarPos, boolean folding, Color... colors) {
+	public SketchPaneView(SketchBoardModel model, Direction toolBarPos, boolean folding, Color... colors) {
 		view = new JPanel();
 		view.setLayout(new BorderLayout());
 		
-		board = new SketchBoardView(new SketchBoardModel());
+		board = new SketchBoardView(model);
 		view.add(board.getComponent(), BorderLayout.CENTER);
 		
 		boolean horizontal = toolBarPos == Direction.UP || toolBarPos == Direction.DOWN;

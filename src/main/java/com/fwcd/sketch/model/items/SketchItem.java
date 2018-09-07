@@ -1,13 +1,11 @@
 package com.fwcd.sketch.model.items;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Polygon2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.sketch.view.tools.EditingTool;
 
 /**
  * Represents an immutable item on a SketchBoard.
@@ -35,6 +33,4 @@ public interface SketchItem extends Serializable {
 			}))
 			.movedBy(hb.getTopLeft());
 	}
-	
-	default Optional<EditingTool<?>> getEditingTool() { return Optional.empty(); }
 }

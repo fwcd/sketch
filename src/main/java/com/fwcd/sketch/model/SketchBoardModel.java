@@ -3,6 +3,7 @@ package com.fwcd.sketch.model;
 import java.awt.Color;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,6 +18,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 public class SketchBoardModel {
+	private static final Type ITEMS_TYPE = new TypeToken<List<SketchItem>>() {}.getType();
 	private final Gson gson = new GsonBuilder()
 			.registerTypeAdapter(SketchItem.class, new PolymorphicSerializer<SketchItem>())
 			.create();
@@ -69,14 +71,14 @@ public class SketchBoardModel {
 	}
 	
 	public void loadItemsFromJSON(String json) {
-		items.set(gson.fromJson(json, new TypeToken<List<SketchItem>>() {}.getType()));
+		items.set(gson.fromJson(json, ITEMS_TYPE));
 	}
 	
 	public void writeItemsAsJSON(Writer writer) {
-		gson.toJson(items.get(), writer);
+		gson.toJson(items.get(), ITEMS_TYPE, writer);
 	}
 	
-	public void loadItemsFromJSON(Reader reader) {
-		items.set(gson.fromJson(reader, new TypeToken<List<SketchItem>>() {}.getType()));
+	public void readItemsFromJSON(Reader reader) {
+		items.set(gson.fromJson(reader, ITEMS_TYPE));
 	}
 }

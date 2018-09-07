@@ -130,7 +130,7 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 
 	public void load(Path file) {
 		try (Reader reader = Files.newBufferedReader(file)) {
-			model.loadItemsFromJSON(reader);
+			model.readItemsFromJSON(reader);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(component, "A " + e.getClass().getSimpleName() + " occurred while loading your file");
 		}

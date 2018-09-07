@@ -1,7 +1,6 @@
 package com.fwcd.sketch.view.canvas;
 
 import java.awt.BasicStroke;
-import java.awt.Font;
 import java.awt.Graphics2D;
 
 import com.fwcd.fructose.draw.DrawGraphics;

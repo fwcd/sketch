@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
+import com.fwcd.sketch.view.canvas.ItemEditingToolProvider;
 import com.fwcd.sketch.view.canvas.MouseSelection;
 import com.fwcd.sketch.view.canvas.MultiItemSelection;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
@@ -79,13 +80,11 @@ public class MoveTool implements SketchTool {
 			MultiItemSelection items = sel.getItems();
 			if (!items.isEmpty()) {
 				SketchItem item = items.firstItem();
-				Optional<EditingTool<?>> editTool = item.getEditingTool();
-				
-				if (editTool.isPresent()) {
-					this.editTool = editTool;
+				item.accept(new ItemEditingToolProvider(tool -> {
+					editTool = Optional.of(tool);
 					board.getModel().getItems().remove(item);
-					editTool.orElse(null).tryEditing(item);
-				}
+					tool.tryEditing(item);
+				}));
 			}
 		});
 		board.repaint();
