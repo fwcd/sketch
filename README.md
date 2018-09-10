@@ -1,4 +1,6 @@
 # Sketch
-2D vector graphics drawing library for Swing.
+2D vector graphics drawing widget for Swing.
 
 ![Screenshot](screenshot.png)
+
+## Features

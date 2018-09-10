@@ -1,6 +1,6 @@
 package com.fwcd.sketch.view.tools;
 
-public enum EnumSketchTool {
+public enum CommonSketchTool {
 	MOVE(new MoveTool()),
 	BRUSH(new Brush()),
 	ERASER(new Eraser()),
@@ -10,7 +10,7 @@ public enum EnumSketchTool {
 	
 	private final SketchTool tool;
 	
-	private EnumSketchTool(SketchTool tool) {
+	private CommonSketchTool(SketchTool tool) {
 		this.tool = tool;
 	}
 	

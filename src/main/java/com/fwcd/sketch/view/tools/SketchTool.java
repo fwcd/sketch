@@ -4,7 +4,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.util.Optional;
 
 import javax.swing.ImageIcon;
 
@@ -29,6 +28,4 @@ public interface SketchTool {
 	default void onKeyPress(KeyEvent e, SketchBoardView board) {}
 	
 	default Cursor getCursor() { return Cursor.getDefaultCursor(); }
-	
-	default Optional<SketchTool> getEditTool() { return Optional.empty(); }
 }

@@ -26,7 +26,7 @@ import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.SketchBoardModel;
 import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.model.items.SketchItemVisitor;
-import com.fwcd.sketch.view.tools.EnumSketchTool;
+import com.fwcd.sketch.view.tools.CommonSketchTool;
 import com.fwcd.sketch.view.tools.Eraser;
 import com.fwcd.sketch.view.tools.SketchTool;
 
@@ -37,7 +37,7 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 	private int snapSensivity = 10;
 	private int gridConstant = 30;
 	
-	private SketchTool tool = EnumSketchTool.BRUSH.get();
+	private SketchTool tool = CommonSketchTool.BRUSH.get();
 	private BrushProperties brushProps = new BrushProperties();
 	
 	public SketchBoardView(SketchBoardModel model) {

@@ -15,7 +15,7 @@ import com.fwcd.fructose.geometry.Direction;
 import com.fwcd.fructose.swing.SelectedButtonPanel;
 import com.fwcd.fructose.swing.View;
 import com.fwcd.sketch.model.SketchBoardModel;
-import com.fwcd.sketch.view.tools.EnumSketchTool;
+import com.fwcd.sketch.view.tools.CommonSketchTool;
 import com.fwcd.sketch.view.tools.SketchTool;
 import com.fwcd.sketch.utils.ColorButton;
 
@@ -43,7 +43,7 @@ public class SketchPaneView implements View {
 		
 		SelectedButtonPanel toolsPane = new SelectedButtonPanel(horizontal, Color.GRAY);
 		toolsPane.setFolding(folding);
-		for (EnumSketchTool enumTool : EnumSketchTool.values()) {
+		for (CommonSketchTool enumTool : CommonSketchTool.values()) {
 			SketchTool tool = enumTool.get();
 			toolsPane.add(new JButton(tool.getIcon()), () -> board.selectTool(tool));
 		}
