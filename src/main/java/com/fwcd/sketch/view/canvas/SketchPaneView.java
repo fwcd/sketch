@@ -20,7 +20,7 @@ import com.fwcd.sketch.view.tools.SketchTool;
 import com.fwcd.sketch.utils.ColorButton;
 
 public class SketchPaneView implements View {
-	private final JPanel view;
+	private final JPanel component;
 	
 	private final SketchBoardView board;
 	private final JToolBar toolBar;
@@ -30,11 +30,11 @@ public class SketchPaneView implements View {
 	}
 	
 	public SketchPaneView(SketchBoardModel model, Direction toolBarPos, boolean folding, Color... colors) {
-		view = new JPanel();
-		view.setLayout(new BorderLayout());
+		component = new JPanel();
+		component.setLayout(new BorderLayout());
 		
 		board = new SketchBoardView(model);
-		view.add(board.getComponent(), BorderLayout.CENTER);
+		component.add(board.getComponent(), BorderLayout.CENTER);
 		
 		boolean horizontal = toolBarPos == Direction.UP || toolBarPos == Direction.DOWN;
 		toolBar = new JToolBar(horizontal ? JToolBar.HORIZONTAL : JToolBar.VERTICAL);
@@ -49,7 +49,7 @@ public class SketchPaneView implements View {
 		}
 		toolBar.add(toolsPane.getComponent());
 
-		toolBar.add(spacer());
+		toolBar.add(newSpacer());
 		
 		SelectedButtonPanel colorPane = new SelectedButtonPanel(horizontal, Color.GRAY);
 		colorPane.setFolding(folding);
@@ -58,32 +58,25 @@ public class SketchPaneView implements View {
 		}
 		toolBar.add(colorPane.getComponent());
 		
-		view.add(toolBar, getBorderPos(toolBarPos));
+		component.add(toolBar, toBorderLayoutPosition(toolBarPos));
 	}
 	
-	private Component spacer() {
+	private Component newSpacer() {
 		return Box.createRigidArea(new Dimension(10, 10));
 	}
 
-	private Object getBorderPos(Direction toolBarPos) {
+	private Object toBorderLayoutPosition(Direction toolBarPos) {
 		switch (toolBarPos) {
-		
-		case DOWN:
-			return BorderLayout.SOUTH;
-		case LEFT:
-			return BorderLayout.WEST;
-		case RIGHT:
-			return BorderLayout.EAST;
-		case UP:
-			return BorderLayout.NORTH;
-		default:
-			throw new IllegalArgumentException("Invalid direction");
-		
+			case DOWN: return BorderLayout.SOUTH;
+			case LEFT: return BorderLayout.WEST;
+			case RIGHT: return BorderLayout.EAST;
+			case UP: return BorderLayout.NORTH;
+			default: throw new IllegalArgumentException("Invalid direction");
 		}
 	}
 
 	@Override
 	public JComponent getComponent() {
-		return view;
+		return component;
 	}
 }
