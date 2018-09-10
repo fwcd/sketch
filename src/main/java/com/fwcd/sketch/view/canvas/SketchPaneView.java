@@ -25,24 +25,20 @@ public class SketchPaneView implements View {
 	private final SketchBoardView board;
 	private final JToolBar toolBar;
 	
-	public SketchPaneView(SketchBoardModel model) {
-		this(model, Direction.LEFT, false, Color.BLACK, Color.RED, Color.YELLOW, Color.BLUE);
-	}
-	
-	public SketchPaneView(SketchBoardModel model, Direction toolBarPos, boolean folding, Color... colors) {
+	private SketchPaneView(SketchBoardModel model, Direction toolBarLocation, boolean foldMenus, Color... colors) {
 		component = new JPanel();
 		component.setLayout(new BorderLayout());
 		
 		board = new SketchBoardView(model);
 		component.add(board.getComponent(), BorderLayout.CENTER);
 		
-		boolean horizontal = toolBarPos == Direction.UP || toolBarPos == Direction.DOWN;
+		boolean horizontal = toolBarLocation == Direction.UP || toolBarLocation == Direction.DOWN;
 		toolBar = new JToolBar(horizontal ? JToolBar.HORIZONTAL : JToolBar.VERTICAL);
 		toolBar.setPreferredSize(new Dimension(40, 40));
 		toolBar.setFloatable(false);
 		
 		SelectedButtonPanel toolsPane = new SelectedButtonPanel(horizontal, Color.GRAY);
-		toolsPane.setFolding(folding);
+		toolsPane.setFolding(foldMenus);
 		for (CommonSketchTool enumTool : CommonSketchTool.values()) {
 			SketchTool tool = enumTool.get();
 			toolsPane.add(new JButton(tool.getIcon()), () -> board.selectTool(tool));
@@ -52,13 +48,13 @@ public class SketchPaneView implements View {
 		toolBar.add(newSpacer());
 		
 		SelectedButtonPanel colorPane = new SelectedButtonPanel(horizontal, Color.GRAY);
-		colorPane.setFolding(folding);
+		colorPane.setFolding(foldMenus);
 		for (Color color : colors) {
 			colorPane.add(new ColorButton(color), () -> board.getBrushProperties().setColor(color));
 		}
 		toolBar.add(colorPane.getComponent());
 		
-		component.add(toolBar, toBorderLayoutPosition(toolBarPos));
+		component.add(toolBar, toBorderLayoutPosition(toolBarLocation));
 	}
 	
 	private Component newSpacer() {
@@ -78,5 +74,35 @@ public class SketchPaneView implements View {
 	@Override
 	public JComponent getComponent() {
 		return component;
+	}
+	
+	public static class Builder {
+		private final SketchBoardModel model;
+		private Direction toolBarLocation = Direction.LEFT;
+		private boolean foldMenus = false;
+		private Color[] colors = {Color.BLACK, Color.RED, Color.GREEN, Color.BLUE};
+		
+		public Builder(SketchBoardModel model) {
+			this.model = model;
+		}
+		
+		public Builder toolBarLocation(Direction toolBarLocation) {
+			this.toolBarLocation = toolBarLocation;
+			return this;
+		}
+		
+		public Builder foldMenus(boolean foldMenus) {
+			this.foldMenus = foldMenus;
+			return this;
+		}
+		
+		public Builder colors(Color... colors) {
+			this.colors = colors;
+			return this;
+		}
+		
+		public SketchPaneView build() {
+			return new SketchPaneView(model, toolBarLocation, foldMenus, colors);
+		}
 	}
 }
