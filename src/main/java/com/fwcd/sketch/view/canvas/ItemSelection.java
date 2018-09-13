@@ -9,11 +9,11 @@ import java.util.List;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.DashedStroke;
-import com.fwcd.fructose.swing.Rendereable;
+import com.fwcd.fructose.swing.Renderable;
 import com.fwcd.fructose.swing.SwingGraphics;
 import com.fwcd.sketch.model.items.SketchItem;
 
-public class ItemSelection implements Rendereable {
+public class ItemSelection implements Renderable {
 	private final SketchBoardView board;
 	private final List<ResizeHandle> resizeHandles = new ArrayList<>();
 

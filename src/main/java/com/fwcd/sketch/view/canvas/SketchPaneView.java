@@ -17,7 +17,8 @@ import com.fwcd.fructose.swing.View;
 import com.fwcd.sketch.model.SketchBoardModel;
 import com.fwcd.sketch.view.tools.CommonSketchTool;
 import com.fwcd.sketch.view.tools.SketchTool;
-import com.fwcd.sketch.utils.ColorButton;
+import com.fwcd.sketch.view.utils.ColorButton;
+import com.fwcd.sketch.view.utils.ListenableRenderable;
 
 public class SketchPaneView implements View {
 	private final JPanel component;
@@ -57,6 +58,8 @@ public class SketchPaneView implements View {
 		component.add(toolBar, toBorderLayoutPosition(toolBarLocation));
 	}
 	
+	public SketchBoardView getBoard() { return board; }
+	
 	private Component newSpacer() {
 		return Box.createRigidArea(new Dimension(10, 10));
 	}
@@ -79,6 +82,7 @@ public class SketchPaneView implements View {
 	public static class Builder {
 		private final SketchBoardModel model;
 		private Direction toolBarLocation = Direction.LEFT;
+		private ListenableRenderable[] overlays = {};
 		private boolean foldMenus = false;
 		private Color[] colors = {Color.BLACK, Color.RED, Color.GREEN, Color.BLUE};
 		
@@ -96,13 +100,22 @@ public class SketchPaneView implements View {
 			return this;
 		}
 		
+		public Builder overlays(ListenableRenderable... overlays) {
+			this.overlays = overlays;
+			return this;
+		}
+		
 		public Builder colors(Color... colors) {
 			this.colors = colors;
 			return this;
 		}
 		
 		public SketchPaneView build() {
-			return new SketchPaneView(model, toolBarLocation, foldMenus, colors);
+			SketchPaneView pane = new SketchPaneView(model, toolBarLocation, foldMenus, colors);
+			for (ListenableRenderable overlay : overlays) {
+				pane.getBoard().pushOverlay(overlay);
+			}
+			return pane;
 		}
 	}
 }

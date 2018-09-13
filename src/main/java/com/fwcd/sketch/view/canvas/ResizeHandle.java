@@ -8,11 +8,11 @@ import java.util.function.Function;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Square2D;
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.fructose.swing.Rendereable;
+import com.fwcd.fructose.swing.Renderable;
 import com.fwcd.fructose.swing.SwingGraphics;
 import com.fwcd.sketch.model.items.SketchItem;
 
-public class ResizeHandle implements Rendereable {
+public class ResizeHandle implements Renderable {
 	public static enum Corner {
 		TOP_LEFT(Rectangle2D::getTopLeft),
 		TOP_RIGHT(Rectangle2D::getTopRight),

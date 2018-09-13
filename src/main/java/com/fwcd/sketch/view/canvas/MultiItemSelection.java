@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import com.fwcd.fructose.geometry.Vector2D;
-import com.fwcd.fructose.swing.Rendereable;
+import com.fwcd.fructose.swing.Renderable;
 import com.fwcd.sketch.model.items.SketchItem;
 
-public class MultiItemSelection implements Rendereable, Iterable<SketchItem> {
+public class MultiItemSelection implements Renderable, Iterable<SketchItem> {
 	private final Map<SketchItem, ItemSelection> items = new HashMap<>();
 	private final SketchBoardView board;
 	

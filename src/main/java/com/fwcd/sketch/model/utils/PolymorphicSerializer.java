@@ -1,4 +1,4 @@
-package com.fwcd.sketch.utils;
+package com.fwcd.sketch.model.utils;
 
 import java.lang.reflect.Type;
 

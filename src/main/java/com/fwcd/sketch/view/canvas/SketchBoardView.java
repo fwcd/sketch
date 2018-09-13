@@ -7,20 +7,17 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Iterator;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.fwcd.fructose.Pair;
 import com.fwcd.fructose.geometry.Vector2D;
+import com.fwcd.fructose.structs.ArrayStack;
+import com.fwcd.fructose.structs.Stack;
 import com.fwcd.fructose.swing.MouseHandler;
 import com.fwcd.fructose.swing.RenderPanel;
+import com.fwcd.fructose.swing.Renderable;
 import com.fwcd.fructose.swing.View;
 import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.SketchBoardModel;
@@ -29,6 +26,7 @@ import com.fwcd.sketch.model.items.SketchItemVisitor;
 import com.fwcd.sketch.view.tools.CommonSketchTool;
 import com.fwcd.sketch.view.tools.Eraser;
 import com.fwcd.sketch.view.tools.SketchTool;
+import com.fwcd.sketch.view.utils.ListenableRenderable;
 
 public class SketchBoardView implements View, Iterable<SketchItem> {
 	private final JPanel component;
@@ -40,6 +38,8 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 	private SketchTool tool = CommonSketchTool.BRUSH.get();
 	private BrushProperties brushProps = new BrushProperties();
 	
+	private Stack<Overlay> overlays = new ArrayStack<>();
+	
 	public SketchBoardView(SketchBoardModel model) {
 		this.model = model;
 		
@@ -50,6 +50,12 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 		model.getShowGrid().listen(s -> component.repaint());
 		model.getItems().listen(s -> component.repaint());
 		
+		setupInputListeners();
+		
+		brushProps.getThicknessProperty().addChangeListener(this::repaint);
+	}
+	
+	private void setupInputListeners() {
 		MouseHandler mouseHandler = new MouseHandler() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -89,21 +95,17 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 			}
 		};
 		
-		mouseHandler.connect(component);
-		
 		KeyAdapter keyAdapter = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				tool.onKeyPress(e, SketchBoardView.this);
 			}
-			
 		};
 		
+		mouseHandler.connect(component);
 		component.addKeyListener(keyAdapter);
-		
-		brushProps.getThicknessProperty().addChangeListener(this::repaint);
 	}
-
+	
 	private Vector2D snappedPos(MouseEvent e) {
 		if (model.getSnapToGrid().get()) {
 			return new Vector2D(snapCoordinate(e.getX()), snapCoordinate(e.getY()));
@@ -127,24 +129,6 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 			return c;
 		}
 	}
-
-	public void load(Path file) {
-		try (Reader reader = Files.newBufferedReader(file)) {
-			model.readItemsFromJSON(reader);
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(component, "A " + e.getClass().getSimpleName() + " occurred while loading your file");
-		}
-		
-		component.repaint();
-	}
-	
-	public void save(Path file) {
-		try (Writer writer = Files.newBufferedWriter(file)) {
-			model.writeItemsAsJSON(writer);
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(component, "A " + e.getClass().getSimpleName() + " occurred while saving your file.");
-		}
-	}
 	
 	@Override
 	public JPanel getComponent() {
@@ -161,8 +145,13 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 	
 	private void render(Graphics2D g2d, Dimension canvasSize) {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
 		renderModel(g2d, canvasSize);
 		tool.render(g2d, canvasSize, this); // Perform tool-specific rendering
+		
+		for (Renderable overlay : overlays) {
+			overlay.render(g2d, canvasSize);
+		}
 	}
 	
 	public void renderTo(Graphics2D g2d) {
@@ -193,7 +182,17 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 	public Iterator<SketchItem> iterator() {
 		return model.getItems().iterator();
 	}
-
+	
+	public void pushOverlay(ListenableRenderable renderable) {
+		overlays.push(new Overlay(renderable, component::repaint));
+		component.repaint();
+	}
+	
+	public void popOverlay() {
+		Overlay overlay = overlays.pop();
+		overlay.dispose();
+	}
+	
 	public void selectTool(SketchTool tool) {
 		this.tool = tool;
 	}
