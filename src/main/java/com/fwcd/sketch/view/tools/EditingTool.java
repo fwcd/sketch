@@ -8,7 +8,7 @@ import com.fwcd.sketch.model.items.SketchItem;
 public abstract class EditingTool<T extends SketchItem> implements SketchTool {
 	public abstract void edit(T item);
 	
-	public abstract T get(SketchBoardView board);
+	public abstract T getItem(SketchBoardView board);
 	
 	@SuppressWarnings("unchecked")
 	public void tryEditing(SketchItem item) {

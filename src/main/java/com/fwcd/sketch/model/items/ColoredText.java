@@ -20,8 +20,6 @@ public class ColoredText implements ColoredSketchItem {
 	private final float size;
 	private final Vector2D pos;
 	
-	private Vector2D lastLinePos;
-	
 	private transient Rectangle2D hitBox;
 	
 	public ColoredText(String text, Color color, float size, Vector2D pos) {
@@ -36,7 +34,7 @@ public class ColoredText implements ColoredSketchItem {
 		this.pos = pos;
 	}
 	
-	private ColoredText(String[] text, Color color, float size, Vector2D pos) {
+	public ColoredText(String[] text, Color color, float size, Vector2D pos) {
 		this.text = text;
 		this.color = color;
 		this.size = size;
@@ -50,14 +48,6 @@ public class ColoredText implements ColoredSketchItem {
 	@Override
 	public Color getColor() {
 		return color;
-	}
-	
-	public void setLastLinePos(Vector2D lastLinePos) {
-		this.lastLinePos = lastLinePos;
-	}
-	
-	public Vector2D getLastLinePos() {
-		return lastLinePos;
 	}
 	
 	@Override
@@ -81,6 +71,10 @@ public class ColoredText implements ColoredSketchItem {
 	public int lineCount() {
 		return text.length;
 	}
+	
+	public String[] getLines() {
+		return text;
+	}
 
 	public String getLine(int i) {
 		return text[i];
@@ -88,23 +82,6 @@ public class ColoredText implements ColoredSketchItem {
 
 	public String lastLine() {
 		return text[text.length - 1];
-	}
-	
-	public String getTotalText() {
-		StringBuilder total = new StringBuilder();
-		
-		int i = 0;
-		for (String line : text) {
-			total.append(line);
-			
-			if (i < (text.length - 1)) {
-				total.append("\n");
-			}
-			
-			i++;
-		}
-		
-		return total.toString();
 	}
 
 	private FontMetrics getMetrics() {

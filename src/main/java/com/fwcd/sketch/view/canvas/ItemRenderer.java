@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 
 import com.fwcd.fructose.draw.DrawGraphics;
 import com.fwcd.fructose.geometry.LineSeg2D;
-import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.SwingGraphics;
 import com.fwcd.sketch.model.items.ColoredLine;
 import com.fwcd.sketch.model.items.ColoredPath;
@@ -54,14 +53,10 @@ public class ItemRenderer implements SketchItemVisitor {
 		int lineHeight = g2d.getFontMetrics().getHeight();
 		int x = (int) text.getPos().getX();
 		int y = (int) text.getPos().getY();
-		int lastY = y;
 		
 		for (int line=0; line<lineCount; line++) {
-			lastY = y;
 			g2d.drawString(text.getLine(line), x, y);
 			y += lineHeight;
 		}
-		
-		text.setLastLinePos(new Vector2D(x, lastY));
 	}
 }

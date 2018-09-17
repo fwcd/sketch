@@ -43,7 +43,7 @@ public class TextTool implements SketchTool {
 	@Override
 	public void onKeyPress(KeyEvent e, SketchBoardView sketchBoard) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			sketchBoard.getModel().getItems().add(editingTool.get(sketchBoard));
+			sketchBoard.getModel().getItems().add(editingTool.getItem(sketchBoard));
 			editingTool.clear();
 		} else {
 			editingTool.onKeyPress(e, sketchBoard);

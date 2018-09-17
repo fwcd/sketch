@@ -11,27 +11,28 @@ import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.items.ColoredText;
 import com.fwcd.sketch.view.canvas.ItemRenderer;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
+import com.fwcd.sketch.view.model.TextEditingToolModel;
+import com.fwcd.sketch.view.model.TextPosition;
 
 public class TextEditingTool extends EditingTool<ColoredText> {
 	private Vector2D pos;
-	private String text = "";
+	private TextEditingToolModel text = new TextEditingToolModel();
 	
 	@Override
 	public void edit(ColoredText coloredText) {
 		pos = coloredText.getPos();
-		text = coloredText.getTotalText();
+		text = new TextEditingToolModel(coloredText.getLines());
 	}
 	
 	@Override
-	public ColoredText get(SketchBoardView board) {
+	public ColoredText getItem(SketchBoardView board) {
 		BrushProperties properties = board.getBrushProperties();
-		ColoredText coloredText = new ColoredText(
-				text,
-				properties.getColor(),
-				properties.getThicknessProperty().getValue(),
-				pos
+		return new ColoredText(
+			text.toLines(),
+			properties.getColor(),
+			properties.getThicknessProperty().getValue(),
+			pos
 		);
-		return coloredText;
 	}
 	
 	@Override
@@ -55,21 +56,20 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 			g2d.setColor(Color.BLACK);
 			g2d.fillRect((int) pos.getX() - 5, (int) pos.getY() - 5, 10, 10);
 			
-			ColoredText coloredText = get(board);
+			TextPosition cursor = text.getCursor();
+			
+			ColoredText coloredText = getItem(board);
 			coloredText.accept(new ItemRenderer(g2d));
 			
 			FontMetrics metrics = g2d.getFontMetrics();
-			Vector2D cursorPos = coloredText
-					.getLastLinePos()
-					.add(new Vector2D(metrics.stringWidth(coloredText.lastLine()), metrics.getHeight()));
+			int lineAscent = metrics.getAscent();
+			int lineHeight = metrics.getHeight();
+			int cursorWidth = 2;
+			int x = (int) pos.getX() + metrics.stringWidth(text.getLineFragment(cursor.getLine(), 0, cursor.getColumn()));
+			int y = (int) pos.getY() + (lineHeight * cursor.getLine()) - lineAscent;
 			
 			g2d.setColor(Color.LIGHT_GRAY);
-			g2d.fillRect(
-					(int) cursorPos.getX(),
-					(int) cursorPos.getY() - (metrics.getHeight() * 2),
-					metrics.getHeight() / 10,
-					metrics.getHeight()
-			);
+			g2d.fillRect(x, y, cursorWidth, lineAscent);
 		}
 	}
 
@@ -80,13 +80,15 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 	@Override
 	public void onKeyPress(KeyEvent e, SketchBoardView sketchBoard) {
 		if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-			if (text.length() > 0) {
-				text = text.substring(0, text.length() - 1);
-			}
-		} else if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-			text += "\n";
+			text.backspace();
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			text.enter();
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			text.moveCursorLeft();
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			text.moveCursorRight();
 		} else if (pos != null && isValidKey(e.getKeyChar())) {
-			text += e.getKeyChar();
+			text.insert(e.getKeyChar());
 		}
 		
 		sketchBoard.repaint();
@@ -94,6 +96,6 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 
 	public void clear() {
 		pos = null;
-		text = "";
+		text = new TextEditingToolModel();
 	}
 }

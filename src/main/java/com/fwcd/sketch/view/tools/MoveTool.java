@@ -94,7 +94,7 @@ public class MoveTool implements SketchTool {
 	public void onKeyPress(KeyEvent e, SketchBoardView board) {
 		if (editTool.isPresent()) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				editTool.ifPresent(tool -> board.getModel().getItems().add(tool.get(board)));
+				editTool.ifPresent(tool -> board.getModel().getItems().add(tool.getItem(board)));
 				editTool = Optional.empty();
 			} else {
 				editTool.orElse(null).onKeyPress(e, board);
