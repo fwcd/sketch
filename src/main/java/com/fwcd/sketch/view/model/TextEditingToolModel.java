@@ -73,6 +73,31 @@ public class TextEditingToolModel {
 		}
 	}
 	
+	public void moveCursorUp() {
+		int line = cursor.getLine();
+		int col = cursor.getColumn();
+		if (line <= 0) {
+			cursor = cursor.withColumn(0);
+		} else {
+			cursor = cursor
+				.plusLines(-1)
+				.withColumn(Math.min(col, text.getLine(line - 1).length()));
+		}
+	}
+	
+	public void moveCursorDown() {
+		int line = cursor.getLine();
+		int col = cursor.getColumn();
+		int lastLineIndex = text.lineCount() - 1;
+		if (line >= lastLineIndex) {
+			cursor = cursor.withColumn(text.getLine(lastLineIndex).length());
+		} else {
+			cursor = cursor
+				.plusLines(1)
+				.withColumn(Math.min(col, text.getLine(line + 1).length()));
+		}
+	}
+	
 	public TextPosition getCursor() {
 		return cursor;
 	}

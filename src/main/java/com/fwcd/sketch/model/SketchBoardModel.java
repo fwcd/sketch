@@ -66,6 +66,10 @@ public class SketchBoardModel {
 		return decomposedItems;
 	}
 	
+	public Stream<SketchItem> streamItems() {
+		return items.stream();
+	}
+	
 	public String getItemsAsJSON() {
 		return gson.toJson(items.get());
 	}
