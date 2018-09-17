@@ -83,8 +83,8 @@ public class ItemSelection implements Renderable {
 	
 	@Override
 	public void render(Graphics2D g2d, Dimension canvasSize) {
-		g2d.setStroke(new DashedStroke(2, 10));
-		g2d.setColor(Color.LIGHT_GRAY);
+		g2d.setStroke(new DashedStroke(1, 5));
+		g2d.setColor(Color.GRAY);
 		
 		boundingBox.draw(new SwingGraphics(g2d));
 		

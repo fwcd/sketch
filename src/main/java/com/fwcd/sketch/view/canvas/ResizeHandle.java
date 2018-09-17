@@ -30,7 +30,7 @@ public class ResizeHandle implements Renderable {
 		}
 	}
 	
-	private final int sideLength = 10;
+	private final int sideLength = 8;
 	private final Corner corner;
 	private Square2D frame;
 	
