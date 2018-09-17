@@ -3,9 +3,9 @@ package com.fwcd.sketch.view.canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.util.Optional;
 import java.util.function.UnaryOperator;
 
+import com.fwcd.fructose.Option;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.Renderable;
@@ -28,20 +28,20 @@ public class MouseSelection implements Renderable {
 		items = new MultiItemSelection(board);
 	}
 
-	private Optional<SketchItem> itemAt(Vector2D pos) {
+	private Option<SketchItem> itemAt(Vector2D pos) {
 		for (SketchItem item : board) {
 			if (item.getHitBox().contains(pos)) {
-				return Optional.of(item); // To allow only one selected item
+				return Option.of(item); // To allow only one selected item
 			}
 		}
 		
-		return Optional.empty();
+		return Option.empty();
 	}
 	
 	private boolean clickSelect(Vector2D pos) {
 		clear();
 		
-		Optional<SketchItem> item = itemAt(pos);
+		Option<SketchItem> item = itemAt(pos);
 		item.ifPresent(items::add);
 		return item.isPresent();
 	}
