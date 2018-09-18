@@ -7,7 +7,6 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -28,7 +27,7 @@ import com.fwcd.sketch.view.tools.Eraser;
 import com.fwcd.sketch.view.tools.SketchTool;
 import com.fwcd.sketch.view.utils.ListenableRenderable;
 
-public class SketchBoardView implements View, Iterable<SketchItem> {
+public class SketchBoardView implements View {
 	private final JPanel component;
 	private final SketchBoardModel model;
 	
@@ -176,11 +175,6 @@ public class SketchBoardView implements View, Iterable<SketchItem> {
 		for (SketchItem item : model.getItems()) {
 			item.accept(renderer);
 		}
-	}
-
-	@Override
-	public Iterator<SketchItem> iterator() {
-		return model.getItems().iterator();
 	}
 	
 	public void pushOverlay(ListenableRenderable renderable) {
