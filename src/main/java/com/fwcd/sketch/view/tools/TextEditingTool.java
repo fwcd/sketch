@@ -13,7 +13,6 @@ import com.fwcd.fructose.Option;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.items.ColoredText;
-import com.fwcd.sketch.view.canvas.ItemRenderer;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
 import com.fwcd.sketch.view.model.TextEditingToolModel;
 import com.fwcd.sketch.view.model.TextPosition;
@@ -69,9 +68,6 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 			g2d.fillRect(xPos - 5, yPos - 5, 10, 10);
 			
 			TextPosition cursor = text.getCursor();
-			
-			ColoredText coloredText = getItem(board);
-			coloredText.accept(new ItemRenderer(g2d));
 			
 			FontMetrics metrics = g2d.getFontMetrics();
 			int lineAscent = metrics.getAscent();
