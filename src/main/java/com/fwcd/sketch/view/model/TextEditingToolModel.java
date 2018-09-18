@@ -1,8 +1,11 @@
 package com.fwcd.sketch.view.model;
 
+import com.fwcd.fructose.OptionInt;
+
 public class TextEditingToolModel {
 	private final TextBufferModel text;
 	private TextPosition cursor = new TextPosition(0, 0);
+	private OptionInt cachedCursorColumn = OptionInt.empty();
 	
 	public TextEditingToolModel() {
 		text = new TextBufferModel();
@@ -19,11 +22,13 @@ public class TextEditingToolModel {
 	public void insert(String delta) {
 		text.getLine(cursor.getLine()).insert(cursor.getColumn(), delta);
 		cursor = cursor.plusColumns(delta.length());
+		discardCachedCursorColumn();
 	}
 	
 	public void insert(char delta) {
 		text.getLine(cursor.getLine()).insert(cursor.getColumn(), delta);
 		cursor = cursor.plusColumns(1);
+		discardCachedCursorColumn();
 	}
 	
 	public void backspace() {
@@ -38,6 +43,7 @@ public class TextEditingToolModel {
 			text.getLine(cursor.getLine()).deleteCharAt(col - 1);
 			cursor = cursor.plusColumns(-1);
 		}
+		discardCachedCursorColumn();
 	}
 	
 	public void enter() {
@@ -45,6 +51,7 @@ public class TextEditingToolModel {
 		cursor = cursor
 			.plusLines(1)
 			.withColumn(0);
+		discardCachedCursorColumn();
 	}
 	
 	public void moveCursorLeft() {
@@ -57,6 +64,7 @@ public class TextEditingToolModel {
 		} else {
 			cursor = cursor.plusColumns(-1);
 		}
+		discardCachedCursorColumn();
 	}
 	
 	public void moveCursorRight() {
@@ -71,17 +79,26 @@ public class TextEditingToolModel {
 		} else {
 			cursor = cursor.plusColumns(1);
 		}
+		discardCachedCursorColumn();
 	}
 	
+	private void discardCachedCursorColumn() {
+		cachedCursorColumn = OptionInt.empty();
+	}
+
 	public void moveCursorUp() {
 		int line = cursor.getLine();
 		int col = cursor.getColumn();
 		if (line <= 0) {
 			cursor = cursor.withColumn(0);
 		} else {
+			if (!cachedCursorColumn.isPresent()) {
+				cachedCursorColumn = OptionInt.of(col);
+			}
+			
 			cursor = cursor
 				.plusLines(-1)
-				.withColumn(Math.min(col, text.getLine(line - 1).length()));
+				.withColumn(Math.min(cachedCursorColumn.unwrap(), text.getLine(line - 1).length()));
 		}
 	}
 	
@@ -92,9 +109,13 @@ public class TextEditingToolModel {
 		if (line >= lastLineIndex) {
 			cursor = cursor.withColumn(text.getLine(lastLineIndex).length());
 		} else {
+			if (!cachedCursorColumn.isPresent()) {
+				cachedCursorColumn = OptionInt.of(col);
+			}
+			
 			cursor = cursor
 				.plusLines(1)
-				.withColumn(Math.min(col, text.getLine(line + 1).length()));
+				.withColumn(Math.min(cachedCursorColumn.orElse(col), text.getLine(line + 1).length()));
 		}
 	}
 	
