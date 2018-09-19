@@ -36,10 +36,10 @@ public class ItemSelection implements Renderable {
 		return item;
 	}
 	
-	private void setItem(SketchItem item) {
-		board.getModel().replaceItem(this.item, item);
-		this.item = item;
-		boundingBox = item.getHitBox().getBoundingBox();
+	private void setItem(SketchItem newItem) {
+		board.getModel().replaceItem(item, newItem);
+		item = newItem;
+		boundingBox = newItem.getHitBox().getBoundingBox();
 		
 		for (ResizeHandle handle : resizeHandles) {
 			handle.update(boundingBox);
