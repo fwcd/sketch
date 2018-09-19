@@ -60,9 +60,9 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 
 	@Override
 	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoardView board) {
-		if (pos != null) {
-			int xPos = (int) pos.unwrap().getX();
-			int yPos = (int) pos.unwrap().getY();
+		pos.ifPresent(pos -> {
+			int xPos = (int) pos.getX();
+			int yPos = (int) pos.getY();
 			
 			g2d.setColor(Color.BLACK);
 			g2d.fillRect(xPos - 5, yPos - 5, 10, 10);
@@ -78,7 +78,7 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 			
 			g2d.setColor(Color.LIGHT_GRAY);
 			g2d.fillRect(x, y, cursorWidth, lineHeight);
-		}
+		});
 	}
 
 	private boolean isValidKey(char c) {
@@ -117,7 +117,7 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 	}
 
 	public void clear() {
-		pos = null;
+		pos = Option.empty();
 		text = new TextEditingToolModel();
 	}
 }

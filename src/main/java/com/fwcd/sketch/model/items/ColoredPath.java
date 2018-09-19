@@ -12,9 +12,8 @@ import com.fwcd.fructose.geometry.LineSeg2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.sketch.model.BrushProperties;
-import com.fwcd.sketch.model.ComposedSketchItem;
 
-public class ColoredPath implements ComposedSketchItem, ColoredSketchItem {
+public class ColoredPath implements ColoredSketchItem {
 	private static final long serialVersionUID = 98734979343455L;
 	private final List<LineSeg2D> lines;
 	private final Color color;

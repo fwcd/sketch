@@ -4,12 +4,12 @@ import java.awt.Color;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.fwcd.fructose.Observable;
-import com.fwcd.fructose.Pair;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.model.utils.PolymorphicSerializer;
@@ -26,7 +26,7 @@ public class SketchBoardModel {
 	private final Observable<Color> background = new Observable<>(Color.WHITE);
 	private final Observable<Boolean> showGrid = new Observable<>(false);
 	private final Observable<Boolean> snapToGrid = new Observable<>(false);
-	private Iterable<Pair<SketchItem, SketchItem>> decomposedItems;
+	private Collection<SketchItemPart> decomposedItems;
 	
 	{
 		items.listen(x -> {
@@ -49,17 +49,10 @@ public class SketchBoardModel {
 		}
 	}
 
-	public Iterable<Pair<SketchItem, SketchItem>> getDecomposedItems() {
+	public Collection<SketchItemPart> getDecomposedItems() {
 		if (decomposedItems == null) {
 			decomposedItems = items.stream()
-				.flatMap(item -> {
-					if (item instanceof ComposedSketchItem) {
-						return ((ComposedSketchItem) item).decompose().stream()
-								.map(decomposed -> new Pair<>(item, decomposed));
-					} else {
-						return Stream.of(new Pair<>(item, item));
-					}
-				})
+				.flatMap(item -> item.decompose().stream().map(part -> new SketchItemPart(item, part)))
 				.collect(Collectors.toList());
 		}
 		

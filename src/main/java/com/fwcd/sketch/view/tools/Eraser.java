@@ -7,10 +7,9 @@ import java.awt.Graphics2D;
 
 import javax.swing.ImageIcon;
 
-import com.fwcd.fructose.Pair;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
-import com.fwcd.sketch.model.items.SketchItem;
+import com.fwcd.sketch.model.SketchItemPart;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
 
 public class Eraser implements SketchTool {
@@ -54,14 +53,9 @@ public class Eraser implements SketchTool {
 	}
 
 	private void erase(SketchBoardView board) {
-		for (Pair<SketchItem, SketchItem> itemPair : board.getModel().getDecomposedItems()) {
-			// SketchItem A is always the parent item, whilst
-			// SketchItem B may either be a (decomposed) sub-item or the parent item
-			//
-			// An example for a sub-item is a stroke inside a path
-			
-			if (pos.sub(itemPair.getRight().getPos()).length() < radius) { // TODO: Use hitboxes instead
-				board.getModel().getItems().remove(itemPair.getLeft());
+		for (SketchItemPart part : board.getModel().getDecomposedItems()) {
+			if (pos.sub(part.getItem().getPos()).length() < radius) { // TODO: Use hitboxes instead
+				board.getModel().getItems().remove(part.getParent());
 			}
 		}
 	}

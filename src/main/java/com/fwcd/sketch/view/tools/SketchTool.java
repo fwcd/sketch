@@ -15,7 +15,7 @@ public interface SketchTool {
 	
 	default void onMouseDown(Vector2D pos, SketchBoardView board) {}
 	
-	default void onMouseDrag(Vector2D YOos, SketchBoardView board) {}
+	default void onMouseDrag(Vector2D pos, SketchBoardView board) {}
 	
 	default void onMouseUp(Vector2D pos, SketchBoardView board) {}
 	

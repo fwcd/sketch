@@ -1,6 +1,8 @@
 package com.fwcd.sketch.model.items;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 
 import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Polygon2D;
@@ -20,6 +22,10 @@ public interface SketchItem extends Serializable {
 	SketchItem transformedBy(DoubleMatrix transform);
 	
 	void accept(SketchItemVisitor visitor);
+	
+	default Collection<SketchItem> decompose() {
+		return Collections.singleton(this);
+	}
 	
 	default SketchItem resizedBy(Vector2D delta) {
 		Rectangle2D hb = getHitBox().getBoundingBox();

@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
-import com.fwcd.fructose.Pair;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.structs.ArrayStack;
 import com.fwcd.fructose.structs.Stack;
@@ -23,7 +22,6 @@ import com.fwcd.sketch.model.SketchBoardModel;
 import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.model.items.SketchItemVisitor;
 import com.fwcd.sketch.view.tools.CommonSketchTool;
-import com.fwcd.sketch.view.tools.Eraser;
 import com.fwcd.sketch.view.tools.SketchTool;
 import com.fwcd.sketch.view.utils.ListenableRenderable;
 
@@ -206,16 +204,5 @@ public class SketchBoardView implements View {
 	 */
 	public Iterable<SketchItem> getItems() {
 		return model.getItems();
-	}
-	
-	/**
-	 * Fetches all items in it's decomposed state. <b>In most cases,
-	 * you will have no use of this method - iterate directly instead. An exception
-	 * of this rule is the {@link Eraser}.</b>
-	 * 
-	 * @return Returns an iterable of pairs - A is always the item and B is a decomposed sub-item or the same
-	 */
-	public Iterable<Pair<SketchItem, SketchItem>> getDecomposedItems() {
-		return model.getDecomposedItems();
 	}
 }
