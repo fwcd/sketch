@@ -4,12 +4,15 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.ResourceImage;
 import com.fwcd.sketch.model.SketchItemPart;
+import com.fwcd.sketch.model.items.BoardItem;
+import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
 
 public class Eraser implements SketchTool {
@@ -54,8 +57,16 @@ public class Eraser implements SketchTool {
 
 	private void erase(SketchBoardView board) {
 		for (SketchItemPart part : board.getModel().getDecomposedItems()) {
-			if (pos.sub(part.getItem().getPos()).length() < radius) { // TODO: Use hitboxes instead
-				board.getModel().getItems().remove(part.getParent());
+			SketchItem item = part.getItem();
+			if (pos.sub(item.getPos()).length() < radius) { // TODO: Use hitboxes instead
+				part.removeFromParent();
+			}
+		}
+		
+		Iterator<BoardItem> itemIterator = board.getModel().getItems().iterator();
+		while (itemIterator.hasNext()) {
+			if (itemIterator.next().get().canBeDisposed()) {
+				itemIterator.remove();
 			}
 		}
 	}

@@ -12,6 +12,7 @@ import com.fwcd.fructose.geometry.LineSeg2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.sketch.model.BrushProperties;
+import com.fwcd.sketch.model.SketchItemPart;
 
 public class ColoredPath implements ColoredSketchItem {
 	private static final long serialVersionUID = 98734979343455L;
@@ -84,10 +85,15 @@ public class ColoredPath implements ColoredSketchItem {
 	}
 
 	@Override
-	public Collection<SketchItem> decompose() {
+	public Collection<SketchItemPart> decompose() {
 		return lines.stream()
-				.map(line -> new ColoredLine(line, color, thickness))
+				.map(line -> new SketchItemPart(new ColoredLine(line, color, thickness), () -> lines.remove(line)))
 				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public boolean canBeDisposed() {
+		return lines.isEmpty();
 	}
 
 	@Override

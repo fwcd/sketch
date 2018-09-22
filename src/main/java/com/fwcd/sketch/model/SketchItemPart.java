@@ -1,18 +1,17 @@
 package com.fwcd.sketch.model;
 
-import com.fwcd.sketch.model.items.BoardItem;
 import com.fwcd.sketch.model.items.SketchItem;
 
 public class SketchItemPart {
-	private final BoardItem parent;
 	private final SketchItem item;
+	private final Runnable remover;
 	
-	public SketchItemPart(BoardItem parent, SketchItem item) {
-		this.parent = parent;
+	public SketchItemPart(SketchItem item, Runnable remover) {
 		this.item = item;
+		this.remover = remover;
 	}
 	
 	public SketchItem getItem() { return item; }
 	
-	public BoardItem getParent() { return parent; }
+	public void removeFromParent() { remover.run(); }
 }

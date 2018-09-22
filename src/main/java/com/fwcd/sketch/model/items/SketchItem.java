@@ -8,6 +8,7 @@ import com.fwcd.fructose.geometry.DoubleMatrix;
 import com.fwcd.fructose.geometry.Polygon2D;
 import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
+import com.fwcd.sketch.model.SketchItemPart;
 
 /**
  * An immutable, drawable item.
@@ -23,9 +24,9 @@ public interface SketchItem extends Serializable {
 	
 	void accept(SketchItemVisitor visitor);
 	
-	default Collection<SketchItem> decompose() {
-		return Collections.singleton(this);
-	}
+	default Collection<SketchItemPart> decompose() { return Collections.emptySet(); }
+	
+	default boolean canBeDisposed() { return false; }
 	
 	default SketchItem resizedBy(Vector2D delta) {
 		Rectangle2D hb = getHitBox().getBoundingBox();

@@ -27,13 +27,6 @@ public class SketchBoardModel {
 	private final Observable<Color> background = new Observable<>(Color.WHITE);
 	private final Observable<Boolean> showGrid = new Observable<>(false);
 	private final Observable<Boolean> snapToGrid = new Observable<>(false);
-	private Collection<SketchItemPart> decomposedItems;
-	
-	{
-		items.listen(x -> {
-			decomposedItems = null;
-		});
-	}
 	
 	public Observable<Color> getBackground() { return background; }
 	
@@ -44,13 +37,16 @@ public class SketchBoardModel {
 	public Observable<Boolean> getSnapToGrid() { return snapToGrid; }
 
 	public Collection<SketchItemPart> getDecomposedItems() {
-		if (decomposedItems == null) {
-			decomposedItems = items.stream()
-				.flatMap(item -> item.get().decompose().stream().map(part -> new SketchItemPart(item, part)))
-				.collect(Collectors.toList());
-		}
-		
-		return decomposedItems;
+		return items.stream()
+			.flatMap(item -> {
+				Collection<SketchItemPart> decomposed = item.get().decompose();
+				if (decomposed.isEmpty()) {
+					return Stream.of(new SketchItemPart(item.get(), () -> items.remove(item)));
+				} else {
+					return decomposed.stream();
+				}
+			})
+			.collect(Collectors.toList());
 	}
 	
 	public Stream<BoardItem> streamItems() {
