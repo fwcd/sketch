@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,10 +63,11 @@ public class SketchBoardModel {
 	}
 	
 	public void writeItemsAsJSON(Writer writer) {
-		gson.toJson(items.get(), ITEMS_TYPE, writer);
+		gson.toJson(items.stream().map(BoardItem::get).collect(Collectors.toList()), ITEMS_TYPE, writer);
 	}
 	
 	public void readItemsFromJSON(Reader reader) {
-		items.set(gson.fromJson(reader, ITEMS_TYPE));
+		List<SketchItem> deserialized = gson.fromJson(reader, ITEMS_TYPE);
+		items.set(deserialized.stream().map(BoardItem::new).collect(Collectors.toCollection(ArrayList::new)));
 	}
 }
