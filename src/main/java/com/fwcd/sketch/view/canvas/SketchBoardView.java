@@ -19,7 +19,7 @@ import com.fwcd.fructose.swing.Renderable;
 import com.fwcd.fructose.swing.View;
 import com.fwcd.sketch.model.BrushProperties;
 import com.fwcd.sketch.model.SketchBoardModel;
-import com.fwcd.sketch.model.items.SketchItem;
+import com.fwcd.sketch.model.items.BoardItem;
 import com.fwcd.sketch.model.items.SketchItemVisitor;
 import com.fwcd.sketch.view.tools.CommonSketchTool;
 import com.fwcd.sketch.view.tools.SketchTool;
@@ -170,7 +170,7 @@ public class SketchBoardView implements View {
 		}
 		
 		SketchItemVisitor renderer = new ItemRenderer(g2d);
-		for (SketchItem item : model.getItems()) {
+		for (BoardItem item : model.getItems()) {
 			item.accept(renderer);
 		}
 	}
@@ -195,14 +195,5 @@ public class SketchBoardView implements View {
 
 	public void repaint() {
 		component.repaint();
-	}
-
-	/**
-	 * Fetches the items on this sketch board. <b>Generally, it is
-	 * preferrable to iterate directly over this object as that
-	 * will achieve the same result.</b>
-	 */
-	public Iterable<SketchItem> getItems() {
-		return model.getItems();
 	}
 }

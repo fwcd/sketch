@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.structs.ObservableList;
+import com.fwcd.sketch.model.items.BoardItem;
 import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.model.utils.PolymorphicSerializer;
 import com.google.gson.Gson;
@@ -22,7 +23,7 @@ public class SketchBoardModel {
 	private final Gson gson = new GsonBuilder()
 			.registerTypeAdapter(SketchItem.class, new PolymorphicSerializer<SketchItem>())
 			.create();
-	private final ObservableList<SketchItem> items = new ObservableList<>();
+	private final ObservableList<BoardItem> items = new ObservableList<>();
 	private final Observable<Color> background = new Observable<>(Color.WHITE);
 	private final Observable<Boolean> showGrid = new Observable<>(false);
 	private final Observable<Boolean> snapToGrid = new Observable<>(false);
@@ -36,30 +37,23 @@ public class SketchBoardModel {
 	
 	public Observable<Color> getBackground() { return background; }
 	
-	public ObservableList<SketchItem> getItems() { return items; }
+	public ObservableList<BoardItem> getItems() { return items; }
 	
-	public Observable<Boolean> getShowGrid() { return showGrid;}
+	public Observable<Boolean> getShowGrid() { return showGrid; }
 	
-	public Observable<Boolean> getSnapToGrid() { return snapToGrid;}
-	
-	public void replaceItem(SketchItem item, SketchItem replacement) {
-		if (items.contains(item)) {
-			int index = items.indexOf(item);
-			items.set(index, replacement);
-		}
-	}
+	public Observable<Boolean> getSnapToGrid() { return snapToGrid; }
 
 	public Collection<SketchItemPart> getDecomposedItems() {
 		if (decomposedItems == null) {
 			decomposedItems = items.stream()
-				.flatMap(item -> item.decompose().stream().map(part -> new SketchItemPart(item, part)))
+				.flatMap(item -> item.get().decompose().stream().map(part -> new SketchItemPart(item, part)))
 				.collect(Collectors.toList());
 		}
 		
 		return decomposedItems;
 	}
 	
-	public Stream<SketchItem> streamItems() {
+	public Stream<BoardItem> streamItems() {
 		return items.stream();
 	}
 	

@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.sketch.model.BrushProperties;
+import com.fwcd.sketch.model.items.BoardItem;
 import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.view.canvas.ItemRenderer;
 import com.fwcd.sketch.view.canvas.SketchBoardView;
@@ -35,7 +36,7 @@ public abstract class DrawTool<T extends SketchItem> implements SketchTool {
 
 	@Override
 	public void onMouseUp(Vector2D pos, SketchBoardView drawBoard) {
-		drawBoard.getModel().getItems().add(item);
+		drawBoard.getModel().getItems().add(new BoardItem(item));
 		
 		start = null;
 		current = null;

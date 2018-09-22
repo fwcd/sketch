@@ -5,49 +5,41 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
-import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.DashedStroke;
 import com.fwcd.fructose.swing.Renderable;
 import com.fwcd.fructose.swing.SwingGraphics;
+import com.fwcd.sketch.model.items.BoardItem;
 import com.fwcd.sketch.model.items.SketchItem;
 
-public class ItemSelection implements Renderable {
+public class ItemSelection implements Renderable, AutoCloseable {
 	private final SketchBoardView board;
 	private final List<ResizeHandle> resizeHandles = new ArrayList<>();
-
-	private SketchItem item;
-	private Rectangle2D boundingBox;
+	private final List<Consumer<SketchItem>> activeListeners = new ArrayList<>();
+	private final BoardItem item;
 	
 	private Vector2D lastPos = null;
 	private ResizeHandle activeHandle = null;
 	
-	public ItemSelection(SketchItem item, SketchBoardView board) {
+	public ItemSelection(BoardItem item, SketchBoardView board) {
 		this.board = board;
-		setItem(item);
+		this.item = item;
 		
 		for (ResizeHandle.Corner corner : ResizeHandle.Corner.values()) {
-			resizeHandles.add(new ResizeHandle(boundingBox, corner));
+			resizeHandles.add(new ResizeHandle(item.get().getHitBox().getBoundingBox(), corner));
 		}
+		
+		setupListeners();
 	}
 	
-	public SketchItem getItem() {
+	public BoardItem getItem() {
 		return item;
 	}
 	
-	private void setItem(SketchItem newItem) {
-		board.getModel().replaceItem(item, newItem);
-		item = newItem;
-		boundingBox = newItem.getHitBox().getBoundingBox();
-		
-		for (ResizeHandle handle : resizeHandles) {
-			handle.update(boundingBox);
-		}
-	}
-	
 	private void move(Vector2D delta) {
-		setItem(item.movedBy(delta));
+		item.apply(it -> it.movedBy(delta));
 		board.repaint();
 	}
 	
@@ -69,7 +61,7 @@ public class ItemSelection implements Renderable {
 			if (activeHandle == null) {
 				move(pos.sub(lastPos));
 			} else {
-				setItem(activeHandle.resize(item, lastPos, pos));
+				item.apply(it -> activeHandle.resize(it, lastPos, pos));
 			}
 		}
 		
@@ -86,10 +78,30 @@ public class ItemSelection implements Renderable {
 		g2d.setStroke(new DashedStroke(1, 5));
 		g2d.setColor(Color.GRAY);
 		
-		boundingBox.draw(new SwingGraphics(g2d));
+		item.get().getHitBox().getBoundingBox().draw(new SwingGraphics(g2d));
 		
 		for (ResizeHandle handle : resizeHandles) {
 			handle.render(g2d, canvasSize);
 		}
+	}
+	
+	private void setupListeners() {
+		for (ResizeHandle handle : resizeHandles) {
+			Consumer<SketchItem> listener = it -> handle.update(it.getHitBox().getBoundingBox());
+			item.listen(listener);
+			activeListeners.add(listener);
+		}
+	}
+	
+	private void removeListeners() {
+		for (Consumer<SketchItem> listener : activeListeners) {
+			item.unlisten(listener);
+		}
+		activeListeners.clear();
+	}
+	
+	@Override
+	public void close() {
+		removeListeners();
 	}
 }

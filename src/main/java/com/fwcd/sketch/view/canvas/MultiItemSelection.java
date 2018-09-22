@@ -3,34 +3,30 @@ package com.fwcd.sketch.view.canvas;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import com.fwcd.fructose.geometry.Vector2D;
 import com.fwcd.fructose.swing.Renderable;
+import com.fwcd.sketch.model.items.BoardItem;
 import com.fwcd.sketch.model.items.SketchItem;
 
-public class MultiItemSelection implements Renderable, Iterable<SketchItem> {
-	private final Map<SketchItem, ItemSelection> items = new HashMap<>();
+public class MultiItemSelection implements Renderable, Iterable<BoardItem> {
+	private final Map<BoardItem, ItemSelection> items = new LinkedHashMap<>();
 	private final SketchBoardView board;
 	
 	public MultiItemSelection(SketchBoardView board) {
 		this.board = board;
 	}
 	
-	public void add(SketchItem item) {
+	public void add(BoardItem item) {
 		items.put(item, new ItemSelection(item, board));
 	}
 	
-	public void remove(SketchItem item) {
+	public void remove(BoardItem item) {
 		items.remove(item);
-	}
-	
-	private void replace(SketchItem item, SketchItem replacement) {
-		remove(item);
-		add(replacement);
 	}
 	
 	public void clear() {
@@ -62,12 +58,9 @@ public class MultiItemSelection implements Renderable, Iterable<SketchItem> {
 		items.values().forEach(item -> item.onMouseUp(pos));
 	}
 	
-	public void modify(UnaryOperator<SketchItem> modifier) {
-		for (SketchItem item : new ArrayList<>(items.keySet())) {
-			SketchItem modified = modifier.apply(item);
-			
-			board.getModel().replaceItem(item, modified);
-			replace(item, modified);
+	public void apply(UnaryOperator<SketchItem> mapper) {
+		for (BoardItem item : new ArrayList<>(items.keySet())) {
+			item.apply(mapper);
 		}
 	}
 	
@@ -79,11 +72,11 @@ public class MultiItemSelection implements Renderable, Iterable<SketchItem> {
 	}
 
 	@Override
-	public Iterator<SketchItem> iterator() {
+	public Iterator<BoardItem> iterator() {
 		return items.keySet().iterator();
 	}
 
-	public SketchItem firstItem() {
+	public BoardItem firstItem() {
 		return items.keySet().iterator().next();
 	}
 }

@@ -34,11 +34,11 @@ public class TextEditingTool extends EditingTool<ColoredText> {
 	
 	@Override
 	public ColoredText getItem(SketchBoardView board) {
-		BrushProperties properties = board.getBrushProperties();
+		BrushProperties brush = board.getBrushProperties();
 		return new ColoredText(
 			text.toLines(),
-			properties.getColor(),
-			properties.getThicknessProperty().getValue(),
+			brush.getColor(),
+			brush.getThicknessProperty().getValue(),
 			pos.unwrap()
 		);
 	}

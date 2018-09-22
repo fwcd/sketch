@@ -10,7 +10,7 @@ import com.fwcd.fructose.geometry.Rectangle2D;
 import com.fwcd.fructose.geometry.Vector2D;
 
 /**
- * Represents an immutable item on a SketchBoard.
+ * An immutable, drawable item.
  */
 public interface SketchItem extends Serializable {
 	Polygon2D getHitBox();
