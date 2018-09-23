@@ -17,10 +17,15 @@ import com.fwcd.sketch.model.items.SketchItem;
 import com.fwcd.sketch.model.utils.Base64Serializer;
 import com.fwcd.sketch.model.utils.PolymorphicSerializer;
 import com.fwcd.sketch.view.utils.DescendingIterator;
+import com.fwcd.sketch.view.utils.Indexed;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * The central data model of Sketch. Holds the drawable
+ * elements and properties about the board.
+ */
 public class SketchBoardModel {
 	private static final Type ITEMS_TYPE = new TypeToken<List<SketchItem>>() {}.getType();
 	private final Gson gson = new GsonBuilder()
@@ -31,6 +36,7 @@ public class SketchBoardModel {
 	private final Observable<Color> background = new Observable<>(Color.WHITE);
 	private final Observable<Boolean> showGrid = new Observable<>(false);
 	private final Observable<Boolean> snapToGrid = new Observable<>(false);
+	
 	private final BoardItemEventBus itemEventBus = new BoardItemEventBus();
 	private List<BoardItem> items = new ArrayList<>();
 			
@@ -52,14 +58,22 @@ public class SketchBoardModel {
 	
 	public void addItem(BoardItem item) {
 		items.add(item);
+		
+		int index = items.size() - 1;
+		item.listen(it -> {
+			itemEventBus.getItemChangeListeners().fire(new Indexed<>(index, item));
+			itemEventBus.getChangeListeners().fire(items);
+		});
+		
 		itemEventBus.getAddListeners().fire(item);
-		itemEventBus.getUpdateListeners().fire(items);
+		itemEventBus.getChangeListeners().fire(items);
 	}
 	
 	public void removeItem(BoardItem item) {
 		items.remove(item);
+		
 		itemEventBus.getModifyListeners().fire(items);
-		itemEventBus.getUpdateListeners().fire(items);
+		itemEventBus.getChangeListeners().fire(items);
 	}
 	
 	public Collection<SketchItemPart> getDecomposedItems() {
@@ -67,9 +81,13 @@ public class SketchBoardModel {
 			.flatMap(item -> {
 				Collection<SketchItemPart> decomposed = item.get().decompose();
 				if (decomposed.isEmpty()) {
-					return Stream.of(new SketchItemPart(item.get(), () -> items.remove(item)));
+					return Stream.of(new SketchItemPart(item.get(), () -> removeItem(item)));
 				} else {
-					return decomposed.stream();
+					return decomposed.stream()
+						.map(part -> part.withRemoveListener(() -> {
+							itemEventBus.getItemChangeListeners().fire(new Indexed<>(items.indexOf(item), item));
+							itemEventBus.getChangeListeners().fire(items);
+						}));
 				}
 			})
 			.collect(Collectors.toList());
@@ -82,7 +100,7 @@ public class SketchBoardModel {
 	private void setSketchItems(List<SketchItem> sketchItems) {
 		items = sketchItems.stream().map(BoardItem::new).collect(Collectors.toCollection(ArrayList::new));
 		itemEventBus.getModifyListeners().fire(items);
-		itemEventBus.getUpdateListeners().fire(items);
+		itemEventBus.getChangeListeners().fire(items);
 	}
 	
 	public String getItemsAsJSON() {

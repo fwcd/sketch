@@ -45,7 +45,7 @@ public class SketchBoardView implements View {
 		component.setFocusable(true);
 		
 		model.getShowGrid().listen(s -> component.repaint());
-		model.getItemEventBus().getUpdateListeners().add(s -> component.repaint());
+		model.getItemEventBus().getChangeListeners().add(s -> component.repaint());
 		
 		setupInputListeners();
 		

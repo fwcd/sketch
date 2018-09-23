@@ -26,4 +26,16 @@ public class BoardItem {
 	public void unlisten(Consumer<SketchItem> consumer) { item.unlisten(consumer); }
 	
 	public void apply(UnaryOperator<SketchItem> mapper) { item.set(mapper.apply(item.get())); }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (!(obj instanceof BoardItem)) return false;
+		return ((BoardItem) obj).item.get().equals(item.get());
+	}
+	
+	@Override
+	public int hashCode() {
+		return item.get().hashCode();
+	}
 }
