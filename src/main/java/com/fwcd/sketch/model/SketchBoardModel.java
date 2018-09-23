@@ -79,6 +79,8 @@ public class SketchBoardModel {
 	
 	private void setSketchItems(List<SketchItem> sketchItems) {
 		items = sketchItems.stream().map(BoardItem::new).collect(Collectors.toCollection(ArrayList::new));
+		itemEventBus.getModifyListeners().fire(items);
+		itemEventBus.getUpdateListeners().fire(items);
 	}
 	
 	public String getItemsAsJSON() {
