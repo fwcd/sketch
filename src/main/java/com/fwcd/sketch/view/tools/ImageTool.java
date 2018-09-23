@@ -32,7 +32,7 @@ public class ImageTool extends DrawTool<ImageItem> {
 
 	@Override
 	protected ImageItem getSketchItem(Vector2D startPos, BrushProperties props) {
-		return new ImageItem(startPos, ICON_IMAGE);
+		return new ImageItem(startPos, ICON_IMAGE, 0, 0);
 	}
 
 	@Override

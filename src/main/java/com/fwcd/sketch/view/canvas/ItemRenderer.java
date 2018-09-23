@@ -63,6 +63,8 @@ public class ItemRenderer implements SketchItemVisitor {
 	
 	@Override
 	public void visitImage(ImageItem image) {
-		g2d.drawImage(image.getImage(), (int) image.getPos().getX(), (int) image.getPos().getY(), null);
+		int x = (int) image.getPos().getX();
+		int y = (int) image.getPos().getY();
+		g2d.drawImage(image.getImage(), x, y, image.getWidth(), image.getHeight(), null);
 	}
 }

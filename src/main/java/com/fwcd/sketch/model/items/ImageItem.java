@@ -1,6 +1,5 @@
 package com.fwcd.sketch.model.items;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -20,6 +19,8 @@ public class ImageItem implements SketchItem {
 	
 	private final Vector2D topLeft;
 	private final byte[] rawImage;
+	private final int width;
+	private final int height;
 	
 	private transient BufferedImage cachedImage;
 	private transient Rectangle2D hitBox;
@@ -32,6 +33,8 @@ public class ImageItem implements SketchItem {
 	 */
 	public ImageItem(Vector2D topLeft, BufferedImage image) {
 		this.topLeft = topLeft;
+		width = image.getWidth();
+		height = image.getHeight();
 		cachedImage = image;
 		
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -42,20 +45,44 @@ public class ImageItem implements SketchItem {
 		}
 	}
 	
-	public ImageItem(Vector2D topLeft, byte[] rawImage) {
+	/**
+	 * Creates a new {@link ImageItem} using a {@link BufferedImage}
+	 * and a custom width/height.
+	 * 
+	 * <p>This operation is potentially expensive as the constructor
+	 * will encode the image to a byte array.</p>
+	 */
+	public ImageItem(Vector2D topLeft, BufferedImage image, int width, int height) {
+		this.topLeft = topLeft;
+		this.width = width;
+		this.height = height;
+		cachedImage = image;
 		
+		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+			ImageIO.write(image, "PNG", out);
+			rawImage = out.toByteArray();
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+	
+	public ImageItem(Vector2D topLeft, byte[] rawImage, int width, int height) {
 		this.topLeft = topLeft;
 		this.rawImage = rawImage;
+		this.width = width;
+		this.height = height;
 	}
 	
 	/**
 	 * Private constructor which assumes that {@code rawImage} and
 	 * {@code cachedImage} represent the same image data.
 	 */
-	private ImageItem(Vector2D topLeft, byte[] rawImage, BufferedImage cachedImage) {
+	private ImageItem(Vector2D topLeft, byte[] rawImage, BufferedImage cachedImage, int width, int height) {
 		this.topLeft = topLeft;
 		this.rawImage = rawImage;
 		this.cachedImage = cachedImage;
+		this.width = width;
+		this.height = height;
 	}
 	
 	@Override
@@ -64,7 +91,7 @@ public class ImageItem implements SketchItem {
 	}
 	
 	/**
-	 * Fetches the (lazily) decoded image.
+	 * Fetches the (lazily) decoded, unscaled image.
 	 * 
 	 * <p>This operation is potentially expensive.</p>
 	 */
@@ -83,36 +110,28 @@ public class ImageItem implements SketchItem {
 	@Override
 	public Polygon2D getHitBox() {
 		if (hitBox == null) {
-			BufferedImage image = getImage();
-			hitBox = new Rectangle2D(topLeft, image.getWidth(), image.getHeight());
+			hitBox = new Rectangle2D(topLeft, width, height);
 		}
 		
 		return hitBox;
 	}
 
 	@Override
-	public Vector2D getPos() {
-		return topLeft;
-	}
-
+	public Vector2D getPos() { return topLeft; }
+	
+	public int getWidth() { return width; }
+	
+	public int getHeight() { return height; }
+	
 	@Override
 	public ImageItem movedBy(Vector2D delta) {
 		// TODO: Clone the image?
-		return new ImageItem(topLeft.add(delta), rawImage, cachedImage);
+		return new ImageItem(topLeft.add(delta), rawImage, cachedImage, width, height);
 	}
 	
 	@Override
 	public ImageItem resizedBy(Vector2D delta) {
-		BufferedImage image = getImage();
-		int scaledWidth = image.getWidth() + (int) delta.getX();
-		int scaledHeight = image.getHeight() + (int) delta.getY();
-		BufferedImage scaledImage = new BufferedImage(scaledWidth, scaledHeight, image.getType());
-		Graphics2D g2d = scaledImage.createGraphics();
-		
-		g2d.drawImage(image, 0, 0, scaledWidth, scaledHeight, null);
-		g2d.dispose();
-		
-		return new ImageItem(topLeft, scaledImage);
+		return new ImageItem(topLeft, rawImage, cachedImage, width + (int) delta.getX(), height + (int) delta.getY());
 	}
 	
 	@Override
