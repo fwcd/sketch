@@ -109,7 +109,7 @@ public class MoveTool implements SketchTool {
 				withEditTool(tool -> tool.onKeyPress(e, board), board);
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE) {
-			selection.ifPresent(sel -> sel.getItems().forEach(board.getModel().getItems()::remove));
+			selection.ifPresent(sel -> sel.getItems().forEach(board.getModel()::removeItem));
 		}
 		board.repaint();
 	}

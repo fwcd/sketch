@@ -12,7 +12,6 @@ import com.fwcd.fructose.swing.Renderable;
 import com.fwcd.fructose.swing.SwingGraphics;
 import com.fwcd.sketch.model.items.BoardItem;
 import com.fwcd.sketch.model.items.SketchItem;
-import com.fwcd.sketch.view.utils.DescendingIterator;
 
 public class MouseSelection implements Renderable {
 	private static final Color FRAME_COLOR = new Color(100, 100, 255, 80); // Transparent gray
@@ -31,7 +30,7 @@ public class MouseSelection implements Renderable {
 	}
 
 	private Option<BoardItem> itemAt(Vector2D pos) {
-		for (BoardItem item : new DescendingIterator<>(board.getModel().getItems())) {
+		for (BoardItem item : board.getModel().descendingItems()) {
 			if (item.get().getHitBox().contains(pos)) {
 				return Option.of(item); // To allow only one selected item
 			}

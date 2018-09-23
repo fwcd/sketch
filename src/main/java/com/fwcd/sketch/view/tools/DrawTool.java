@@ -36,7 +36,7 @@ public abstract class DrawTool<T extends SketchItem> implements SketchTool {
 
 	@Override
 	public void onMouseUp(Vector2D pos, SketchBoardView drawBoard) {
-		drawBoard.getModel().getItems().add(new BoardItem(item));
+		drawBoard.getModel().addItem(new BoardItem(item));
 		
 		start = null;
 		current = null;

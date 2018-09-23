@@ -29,7 +29,7 @@ public class TextTool implements SketchTool {
 			editedItem.unwrap().set(newItem);
 		} else {
 			BoardItem boardItem = new BoardItem(newItem);
-			board.getModel().getItems().add(boardItem);
+			board.getModel().addItem(boardItem);
 			editedItem = Option.of(boardItem);
 		}
 	}
