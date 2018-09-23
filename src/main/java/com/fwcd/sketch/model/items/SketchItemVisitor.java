@@ -8,4 +8,6 @@ public interface SketchItemVisitor {
 	default void visitRect(ColoredRect rect) {}
 	
 	default void visitText(ColoredText text) {}
+	
+	default void visitImage(ImageItem image) {}
 }

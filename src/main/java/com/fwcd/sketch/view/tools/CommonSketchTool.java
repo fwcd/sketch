@@ -6,7 +6,8 @@ public enum CommonSketchTool {
 	ERASER(new Eraser()),
 	LINE(new LineTool()),
 	RECT(new RectTool()),
-	TEXT(new TextTool());
+	TEXT(new TextTool()),
+	IMAGE(new ImageTool());
 	
 	private final SketchTool tool;
 	

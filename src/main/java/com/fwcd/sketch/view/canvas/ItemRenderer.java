@@ -10,6 +10,7 @@ import com.fwcd.sketch.model.items.ColoredLine;
 import com.fwcd.sketch.model.items.ColoredPath;
 import com.fwcd.sketch.model.items.ColoredRect;
 import com.fwcd.sketch.model.items.ColoredText;
+import com.fwcd.sketch.model.items.ImageItem;
 import com.fwcd.sketch.model.items.SketchItemVisitor;
 
 public class ItemRenderer implements SketchItemVisitor {
@@ -58,5 +59,10 @@ public class ItemRenderer implements SketchItemVisitor {
 			g2d.drawString(text.getLine(line), x, y);
 			y += lineHeight;
 		}
+	}
+	
+	@Override
+	public void visitImage(ImageItem image) {
+		g2d.drawImage(image.getImage(), (int) image.getPos().getX(), (int) image.getPos().getY(), null);
 	}
 }

@@ -19,7 +19,7 @@ public class ColoredPath implements ColoredSketchItem {
 	private final List<LineSeg2D> lines;
 	private final Color color;
 	private final float thickness;
-	private Rectangle2D hitBox;
+	private transient Rectangle2D hitBox;
 
 	public ColoredPath(List<LineSeg2D> lines, Color color, float thickness) {
 		this.lines = lines;
