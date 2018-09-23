@@ -14,6 +14,7 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.sketch.model.event.BoardItemEventBus;
 import com.fwcd.sketch.model.items.BoardItem;
 import com.fwcd.sketch.model.items.SketchItem;
+import com.fwcd.sketch.model.utils.Base64Serializer;
 import com.fwcd.sketch.model.utils.PolymorphicSerializer;
 import com.fwcd.sketch.view.utils.DescendingIterator;
 import com.google.gson.Gson;
@@ -23,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 public class SketchBoardModel {
 	private static final Type ITEMS_TYPE = new TypeToken<List<SketchItem>>() {}.getType();
 	private final Gson gson = new GsonBuilder()
+		.registerTypeAdapter(byte[].class, new Base64Serializer())
 		.registerTypeAdapter(SketchItem.class, new PolymorphicSerializer<SketchItem>())
 		.create();
 	
