@@ -36,7 +36,7 @@ public abstract class DrawTool<T extends SketchItem> implements SketchTool {
 
 	@Override
 	public void onMouseUp(Vector2D pos, SketchBoardView drawBoard) {
-		drawBoard.getModel().addItem(new BoardItem(item));
+		drawBoard.getModel().addItem(new BoardItem(prepareItemForBoard(item)));
 		
 		start = null;
 		current = null;
@@ -50,7 +50,15 @@ public abstract class DrawTool<T extends SketchItem> implements SketchTool {
 	protected abstract T getSketchItem(Vector2D startPos, BrushProperties props);
 	
 	protected abstract T updateItem(T item, Vector2D start, Vector2D last, Vector2D pos);
-
+	
+	/**
+	 * Allows subclasses to perform additional
+	 * processing with an item prior to placement.
+	 */
+	protected T prepareItemForBoard(T item) {
+		return item;
+	}
+	
 	@Override
 	public void render(Graphics2D g2d, Dimension canvasSize, SketchBoardView board) {
 		if (item != null) {
