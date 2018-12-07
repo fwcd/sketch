@@ -76,6 +76,13 @@ public class SketchBoardModel {
 		itemEventBus.getChangeListeners().fire(items);
 	}
 	
+	public void clear() {
+		items.clear();
+		
+		itemEventBus.getModifyListeners().fire(items);
+		itemEventBus.getChangeListeners().fire(items);
+	}
+	
 	public Collection<SketchItemPart> getDecomposedItems() {
 		return items.stream()
 			.flatMap(item -> {
