@@ -162,8 +162,8 @@ public class SketchBoardView implements View {
 		if (model.getShowGrid().get()) {
 			g2d.setColor(Color.DARK_GRAY);
 			
-			for (int x=gridConstant; x<canvasSize.getWidth(); x+=gridConstant) {
-				for (int y=gridConstant; y<canvasSize.getHeight(); y+=gridConstant) {
+			for (int x = gridConstant; x <canvasSize.getWidth(); x += gridConstant) {
+				for (int y = gridConstant; y < canvasSize.getHeight(); y += gridConstant) {
 					g2d.fillOval(x - 1, y - 1, 2, 2);
 				}
 			}

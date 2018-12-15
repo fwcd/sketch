@@ -15,16 +15,18 @@ import fwcd.sketch.model.items.SketchItemVisitor;
 
 public class ItemRenderer implements SketchItemVisitor {
 	private final Graphics2D g2d;
+	private final DrawGraphics drawGraphics;
 	
 	public ItemRenderer(Graphics2D g2d) {
 		this.g2d = g2d;
+		drawGraphics = new SwingGraphics(g2d);
 	}
 	
 	@Override
 	public void visitLine(ColoredLine line) {
 		g2d.setColor(line.getColor());
-		g2d.setStroke(new BasicStroke(line.getThickness()));
-		line.getLine().draw(new SwingGraphics(g2d));
+		g2d.setStroke(new BasicStroke(line.getThickness(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		line.getLine().draw(drawGraphics);
 	}
 
 	@Override
@@ -32,9 +34,8 @@ public class ItemRenderer implements SketchItemVisitor {
 		g2d.setColor(path.getColor());
 		g2d.setStroke(new BasicStroke(path.getThickness()));
 		
-		DrawGraphics graphics = new SwingGraphics(g2d);
 		for (LineSeg2D line : path.getLines()) {
-			line.fill(graphics);
+			line.fill(drawGraphics);
 		}
 	}
 
@@ -42,7 +43,7 @@ public class ItemRenderer implements SketchItemVisitor {
 	public void visitRect(ColoredRect rect) {
 		g2d.setColor(rect.getColor());
 		g2d.setStroke(new BasicStroke(rect.getThickness()));
-		rect.getRect().draw(new SwingGraphics(g2d));
+		rect.getRect().draw(drawGraphics);
 	}
 
 	@Override
