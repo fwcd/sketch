@@ -10,7 +10,9 @@ import fwcd.sketch.model.items.ColoredLine;
 import fwcd.sketch.model.items.ColoredPath;
 import fwcd.sketch.model.items.ColoredRect;
 import fwcd.sketch.model.items.ColoredText;
+import fwcd.sketch.model.items.CompositeItem;
 import fwcd.sketch.model.items.ImageItem;
+import fwcd.sketch.model.items.SketchItem;
 import fwcd.sketch.model.items.SketchItemVisitor;
 
 public class ItemRenderer implements SketchItemVisitor {
@@ -67,5 +69,12 @@ public class ItemRenderer implements SketchItemVisitor {
 		int x = (int) image.getPos().getX();
 		int y = (int) image.getPos().getY();
 		g2d.drawImage(image.getImage(), x, y, image.getWidth(), image.getHeight(), null);
+	}
+	
+	@Override
+	public void visitComposite(CompositeItem item) {
+		for (SketchItem child : item.getChilds()) {
+			child.accept(this);
+		}
 	}
 }

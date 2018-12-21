@@ -12,9 +12,6 @@ import fwcd.sketch.model.SketchItemPart;
 
 /**
  * An immutable, drawable item.
- * 
- * <p><b>Subtypes are required to implement a value-based
- * hashCode and equals.</b></p>
  */
 public interface SketchItem extends Serializable {
 	Polygon2D getHitBox();

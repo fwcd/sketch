@@ -1,13 +1,17 @@
 package fwcd.sketch.model.items;
 
 public interface SketchItemVisitor {
-	default void visitLine(ColoredLine line) {}
+	default void visitOtherItem(SketchItem item) {}
 	
-	default void visitPath(ColoredPath path) {}
+	default void visitLine(ColoredLine line) { visitOtherItem(line); }
 	
-	default void visitRect(ColoredRect rect) {}
+	default void visitPath(ColoredPath path) { visitOtherItem(path); }
 	
-	default void visitText(ColoredText text) {}
+	default void visitRect(ColoredRect rect) { visitOtherItem(rect); }
 	
-	default void visitImage(ImageItem image) {}
+	default void visitText(ColoredText text) { visitOtherItem(text); }
+	
+	default void visitImage(ImageItem image) { visitOtherItem(image); }
+	
+	default void visitComposite(CompositeItem item) { visitOtherItem(item); }
 }
