@@ -61,7 +61,11 @@ public class ColoredPath implements ColoredSketchItem {
 
 	@Override
 	public Vector2D getPos() {
-		return lines.get(lines.size() / 2).getCenter();
+		if (lines.isEmpty()) {
+			return Vector2D.ZERO;
+		} else {
+			return lines.get(lines.size() / 2).getCenter();
+		}
 	}
 
 	@Override
