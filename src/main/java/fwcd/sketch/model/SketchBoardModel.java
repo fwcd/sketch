@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import fwcd.fructose.Observable;
 import fwcd.sketch.model.event.BoardItemEventBus;
-import fwcd.sketch.model.items.BoardItem;
+import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.model.items.SketchItem;
 import fwcd.sketch.model.utils.Base64Serializer;
 import fwcd.sketch.model.utils.PolymorphicSerializer;
@@ -38,7 +38,7 @@ public class SketchBoardModel {
 	private final Observable<Boolean> snapToGrid = new Observable<>(false);
 	
 	private final BoardItemEventBus itemEventBus = new BoardItemEventBus();
-	private List<BoardItem> items = new ArrayList<>();
+	private List<BoardItemStack> items = new ArrayList<>();
 			
 	public Observable<Color> getBackground() { return background; }
 	
@@ -48,15 +48,15 @@ public class SketchBoardModel {
 	
 	public BoardItemEventBus getItemEventBus() { return itemEventBus; }
 	
-	public Iterable<BoardItem> getItems() { return items; }
+	public Iterable<BoardItemStack> getItems() { return items; }
 	
-	public Stream<BoardItem> streamItems() { return items.stream(); }
+	public Stream<BoardItemStack> streamItems() { return items.stream(); }
 	
-	public DescendingIterator<BoardItem> descendingItems() { return new DescendingIterator<>(items); }
+	public DescendingIterator<BoardItemStack> descendingItems() { return new DescendingIterator<>(items); }
 	
 	public int itemCount() { return items.size(); }
 	
-	public void addItem(BoardItem item) {
+	public void addItem(BoardItemStack item) {
 		items.add(item);
 		
 		int index = items.size() - 1;
@@ -69,7 +69,7 @@ public class SketchBoardModel {
 		itemEventBus.getChangeListeners().fire(items);
 	}
 	
-	public void removeItem(BoardItem item) {
+	public void removeItem(BoardItemStack item) {
 		items.remove(item);
 		
 		itemEventBus.getModifyListeners().fire(items);
@@ -101,11 +101,11 @@ public class SketchBoardModel {
 	}
 	
 	private List<SketchItem> getSketchItems() {
-		return items.stream().map(BoardItem::get).collect(Collectors.toList());
+		return items.stream().map(BoardItemStack::get).collect(Collectors.toList());
 	}
 	
 	private void setSketchItems(List<SketchItem> sketchItems) {
-		items = sketchItems.stream().map(BoardItem::new).collect(Collectors.toCollection(ArrayList::new));
+		items = sketchItems.stream().map(BoardItemStack::new).collect(Collectors.toCollection(ArrayList::new));
 		itemEventBus.getModifyListeners().fire(items);
 		itemEventBus.getChangeListeners().fire(items);
 	}

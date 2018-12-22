@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.swing.ResourceImage;
 import fwcd.sketch.model.SketchItemPart;
-import fwcd.sketch.model.items.BoardItem;
+import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.model.items.SketchItem;
 import fwcd.sketch.view.canvas.SketchBoardView;
 
@@ -63,7 +63,7 @@ public class Eraser implements SketchTool {
 			}
 		}
 		
-		Iterator<BoardItem> itemIterator = board.getModel().getItems().iterator();
+		Iterator<BoardItemStack> itemIterator = board.getModel().getItems().iterator();
 		while (itemIterator.hasNext()) {
 			if (itemIterator.next().get().canBeDisposed()) {
 				itemIterator.remove();

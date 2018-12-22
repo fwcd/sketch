@@ -19,7 +19,7 @@ import fwcd.fructose.swing.Renderable;
 import fwcd.fructose.swing.View;
 import fwcd.sketch.model.BrushProperties;
 import fwcd.sketch.model.SketchBoardModel;
-import fwcd.sketch.model.items.BoardItem;
+import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.model.items.SketchItemVisitor;
 import fwcd.sketch.view.tools.CommonSketchTool;
 import fwcd.sketch.view.tools.SketchTool;
@@ -170,7 +170,7 @@ public class SketchBoardView implements View {
 		}
 		
 		SketchItemVisitor renderer = new ItemRenderer(g2d);
-		for (BoardItem item : model.getItems()) {
+		for (BoardItemStack item : model.getItems()) {
 			item.accept(renderer);
 		}
 	}

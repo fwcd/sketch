@@ -9,14 +9,14 @@ import javax.swing.ImageIcon;
 import fwcd.fructose.Option;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.swing.ResourceImage;
-import fwcd.sketch.model.items.BoardItem;
+import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.model.items.SketchItem;
 import fwcd.sketch.view.canvas.SketchBoardView;
 
 public class TextTool implements SketchTool {
 	private static final ImageIcon ICON = new ResourceImage("/textIcon.png").getAsIcon();
 	private final TextEditingTool editTool = new TextEditingTool();
-	private Option<BoardItem> editedItem = Option.empty();
+	private Option<BoardItemStack> editedItem = Option.empty();
 	
 	@Override
 	public ImageIcon getIcon() {
@@ -28,7 +28,7 @@ public class TextTool implements SketchTool {
 		if (editedItem.isPresent()) {
 			editedItem.unwrap().set(newItem);
 		} else {
-			BoardItem boardItem = new BoardItem(newItem);
+			BoardItemStack boardItem = new BoardItemStack(newItem);
 			board.getModel().addItem(boardItem);
 			editedItem = Option.of(boardItem);
 		}

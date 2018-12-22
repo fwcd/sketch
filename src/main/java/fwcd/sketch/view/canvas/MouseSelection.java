@@ -10,7 +10,7 @@ import fwcd.fructose.geometry.Rectangle2D;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.swing.Renderable;
 import fwcd.fructose.swing.SwingGraphics;
-import fwcd.sketch.model.items.BoardItem;
+import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.model.items.SketchItem;
 
 public class MouseSelection implements Renderable {
@@ -29,8 +29,8 @@ public class MouseSelection implements Renderable {
 		items = new MultiItemSelection(board);
 	}
 
-	private Option<BoardItem> itemAt(Vector2D pos) {
-		for (BoardItem item : board.getModel().descendingItems()) {
+	private Option<BoardItemStack> itemAt(Vector2D pos) {
+		for (BoardItemStack item : board.getModel().descendingItems()) {
 			if (item.get().getHitBox().contains(pos)) {
 				return Option.of(item); // To allow only one selected item
 			}
@@ -42,7 +42,7 @@ public class MouseSelection implements Renderable {
 	private boolean clickSelect(Vector2D pos) {
 		clear();
 		
-		Option<BoardItem> item = itemAt(pos);
+		Option<BoardItemStack> item = itemAt(pos);
 		item.ifPresent(items::add);
 		return item.isPresent();
 	}
@@ -68,7 +68,7 @@ public class MouseSelection implements Renderable {
 			items.clear();
 			frame = new Rectangle2D(startPos, pos);
 			
-			for (BoardItem item : board.getModel().getItems()) {
+			for (BoardItemStack item : board.getModel().getItems()) {
 				if (frame.intersects(item.get().getHitBox().getBoundingBox())) {
 					items.add(item);
 				}

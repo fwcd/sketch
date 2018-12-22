@@ -7,23 +7,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import fwcd.fructose.StreamUtils;
+import fwcd.fructose.geometry.Rectangle2D;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.swing.DashedStroke;
 import fwcd.fructose.swing.Renderable;
 import fwcd.fructose.swing.SwingGraphics;
-import fwcd.sketch.model.items.BoardItem;
+import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.model.items.SketchItem;
 
 public class ItemSelection implements Renderable, AutoCloseable {
 	private final SketchBoardView board;
 	private final List<ResizeHandle> resizeHandles = new ArrayList<>();
-	private final List<Consumer<SketchItem>> activeListeners = new ArrayList<>();
-	private final BoardItem item;
+	private final List<Consumer<Iterable<SketchItem>>> activeListeners = new ArrayList<>();
+	private final BoardItemStack item;
 	
 	private Vector2D lastPos = null;
 	private ResizeHandle activeHandle = null;
 	
-	public ItemSelection(BoardItem item, SketchBoardView board) {
+	public ItemSelection(BoardItemStack item, SketchBoardView board) {
 		this.board = board;
 		this.item = item;
 		
@@ -34,7 +36,7 @@ public class ItemSelection implements Renderable, AutoCloseable {
 		setupListeners();
 	}
 	
-	public BoardItem getItem() {
+	public BoardItemStack getItem() {
 		return item;
 	}
 	
@@ -87,14 +89,17 @@ public class ItemSelection implements Renderable, AutoCloseable {
 	
 	private void setupListeners() {
 		for (ResizeHandle handle : resizeHandles) {
-			Consumer<SketchItem> listener = it -> handle.update(it.getHitBox().getBoundingBox());
+			Consumer<Iterable<SketchItem>> listener = it -> handle.update(StreamUtils.stream(it)
+				.map(v -> v.getHitBox().getBoundingBox())
+				.reduce(Rectangle2D::merge)
+				.orElseGet(() -> new Rectangle2D(0, 0, 0, 0)));
 			item.listen(listener);
 			activeListeners.add(listener);
 		}
 	}
 	
 	private void removeListeners() {
-		for (Consumer<SketchItem> listener : activeListeners) {
+		for (Consumer<Iterable<SketchItem>> listener : activeListeners) {
 			item.unlisten(listener);
 		}
 		activeListeners.clear();

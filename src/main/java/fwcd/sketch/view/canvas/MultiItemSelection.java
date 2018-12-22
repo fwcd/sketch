@@ -10,22 +10,22 @@ import java.util.function.UnaryOperator;
 
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.swing.Renderable;
-import fwcd.sketch.model.items.BoardItem;
+import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.model.items.SketchItem;
 
-public class MultiItemSelection implements Renderable, Iterable<BoardItem> {
-	private final Map<BoardItem, ItemSelection> items = new LinkedHashMap<>();
+public class MultiItemSelection implements Renderable, Iterable<BoardItemStack> {
+	private final Map<BoardItemStack, ItemSelection> items = new LinkedHashMap<>();
 	private final SketchBoardView board;
 	
 	public MultiItemSelection(SketchBoardView board) {
 		this.board = board;
 	}
 	
-	public void add(BoardItem item) {
+	public void add(BoardItemStack item) {
 		items.put(item, new ItemSelection(item, board));
 	}
 	
-	public void remove(BoardItem item) {
+	public void remove(BoardItemStack item) {
 		items.remove(item);
 	}
 	
@@ -59,7 +59,7 @@ public class MultiItemSelection implements Renderable, Iterable<BoardItem> {
 	}
 	
 	public void apply(UnaryOperator<SketchItem> mapper) {
-		for (BoardItem item : new ArrayList<>(items.keySet())) {
+		for (BoardItemStack item : new ArrayList<>(items.keySet())) {
 			item.apply(mapper);
 		}
 	}
@@ -72,11 +72,11 @@ public class MultiItemSelection implements Renderable, Iterable<BoardItem> {
 	}
 
 	@Override
-	public Iterator<BoardItem> iterator() {
+	public Iterator<BoardItemStack> iterator() {
 		return items.keySet().iterator();
 	}
 
-	public BoardItem firstItem() {
+	public BoardItemStack firstItem() {
 		return items.keySet().iterator().next();
 	}
 }

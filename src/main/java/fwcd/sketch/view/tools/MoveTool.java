@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import fwcd.fructose.Option;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.swing.ResourceImage;
-import fwcd.sketch.model.items.BoardItem;
+import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.view.canvas.ItemEditingToolProvider;
 import fwcd.sketch.view.canvas.MouseSelection;
 import fwcd.sketch.view.canvas.MultiItemSelection;
@@ -20,7 +20,7 @@ public class MoveTool implements SketchTool {
 	private static final ImageIcon ICON = new ResourceImage("/moveIcon.png").getAsIcon();
 	private Option<MouseSelection> selection = Option.empty();
 	private Option<EditingTool<?>> editTool = Option.empty();
-	private Option<BoardItem> editedItem = Option.empty();
+	private Option<BoardItemStack> editedItem = Option.empty();
 	
 	@Override
 	public ImageIcon getIcon() {
@@ -29,7 +29,7 @@ public class MoveTool implements SketchTool {
 	
 	private void withEditTool(Consumer<EditingTool<?>> consumer, SketchBoardView board) {
 		EditingTool<?> tool = editTool.unwrap("Editing tool not present");
-		BoardItem boardItem = editedItem.unwrap("Edited item not present");
+		BoardItemStack boardItem = editedItem.unwrap("Edited item not present");
 		consumer.accept(tool);
 		boardItem.set(tool.getItem(board));
 	}
@@ -88,7 +88,7 @@ public class MoveTool implements SketchTool {
 		selection.ifPresent(sel -> {
 			MultiItemSelection items = sel.getItems();
 			if (!items.isEmpty()) {
-				BoardItem item = items.firstItem();
+				BoardItemStack item = items.firstItem();
 				item.accept(new ItemEditingToolProvider(tool -> {
 					editTool = Option.of(tool);
 					editedItem = Option.of(item);
