@@ -77,6 +77,10 @@ public class BoardItemStack {
 		listeners.fire(stack);
 	}
 	
+	public void clear() { set(EmptyItem.INSTANCE); }
+	
+	public Stack<? extends SketchItem> getStack() { return stack; }
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) return false;
