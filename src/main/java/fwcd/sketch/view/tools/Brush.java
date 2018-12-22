@@ -5,6 +5,8 @@ import java.util.function.Consumer;
 import javax.swing.ImageIcon;
 
 import fwcd.fructose.EventListenerList;
+import fwcd.fructose.Option;
+import fwcd.fructose.function.Subscription;
 import fwcd.fructose.geometry.LineSeg2D;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.swing.ResourceImage;
@@ -46,12 +48,7 @@ public class Brush extends DrawTool<ColoredPath> {
 	}
 	
 	@Override
-	public void addAddedPartListener(Consumer<? super SketchItem> listener) {
-		partListeners.add(listener);
-	}
-	
-	@Override
-	public void removeAddedPartListener(Consumer<? super SketchItem> listener) {
-		partListeners.remove(listener);
+	public Option<Subscription> subscribeToAddedParts(Consumer<? super SketchItem> listener) {
+		return Option.of(partListeners.subscribe(listener));
 	}
 }

@@ -2,7 +2,11 @@ package fwcd.sketch.view.tools;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.util.function.Consumer;
 
+import fwcd.fructose.EventListenerList;
+import fwcd.fructose.Option;
+import fwcd.fructose.function.Subscription;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.sketch.model.BrushProperties;
 import fwcd.sketch.model.items.BoardItemStack;
@@ -11,6 +15,7 @@ import fwcd.sketch.view.canvas.ItemRenderer;
 import fwcd.sketch.view.canvas.SketchBoardView;
 
 public abstract class DrawTool<T extends SketchItem> implements SketchTool {
+	private final EventListenerList<SketchItem> completionListeners = new EventListenerList<>();
 	private T item = null;
 	private BrushProperties props;
 	private Vector2D start = null;
@@ -36,7 +41,9 @@ public abstract class DrawTool<T extends SketchItem> implements SketchTool {
 
 	@Override
 	public void onMouseUp(Vector2D pos, SketchBoardView drawBoard) {
-		drawBoard.getModel().addItem(new BoardItemStack(prepareItemForBoard(item)));
+		T completed = prepareItemForBoard(item);
+		completionListeners.fire(completed);
+		drawBoard.getModel().addItem(new BoardItemStack(completed));
 		
 		start = null;
 		current = null;
@@ -64,5 +71,10 @@ public abstract class DrawTool<T extends SketchItem> implements SketchTool {
 		if (item != null) {
 			item.accept(new ItemRenderer(g2d));
 		}
+	}
+	
+	@Override
+	public Option<Subscription> subscribeToCompletions(Consumer<? super SketchItem> listener) {
+		return Option.of(completionListeners.subscribe(listener));
 	}
 }

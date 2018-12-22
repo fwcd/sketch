@@ -8,6 +8,8 @@ import java.util.function.Consumer;
 
 import javax.swing.ImageIcon;
 
+import fwcd.fructose.Option;
+import fwcd.fructose.function.Subscription;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.sketch.model.items.SketchItem;
 import fwcd.sketch.view.canvas.SketchBoardView;
@@ -31,7 +33,7 @@ public interface SketchTool {
 	
 	default Cursor getCursor() { return Cursor.getDefaultCursor(); }
 	
-	default void addAddedPartListener(Consumer<? super SketchItem> listener) {}
+	default Option<Subscription> subscribeToAddedParts(Consumer<? super SketchItem> listener) { return Option.empty(); }
 	
-	default void removeAddedPartListener(Consumer<? super SketchItem> listener) {}
+	default Option<Subscription> subscribeToCompletions(Consumer<? super SketchItem> listener) { return Option.empty(); }
 }
