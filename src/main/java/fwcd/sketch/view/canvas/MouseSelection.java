@@ -69,7 +69,7 @@ public class MouseSelection implements Renderable {
 			frame = new Rectangle2D(startPos, pos);
 			
 			for (BoardItemStack item : board.getModel().getItems()) {
-				if (frame.intersects(item.get().getHitBox().getBoundingBox())) {
+				if (frame.intersects(item.getBoundingBox())) {
 					items.add(item);
 				}
 			}

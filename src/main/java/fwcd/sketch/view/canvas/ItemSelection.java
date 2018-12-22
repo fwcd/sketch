@@ -30,7 +30,7 @@ public class ItemSelection implements Renderable, AutoCloseable {
 		this.item = item;
 		
 		for (ResizeHandle.Corner corner : ResizeHandle.Corner.values()) {
-			resizeHandles.add(new ResizeHandle(item.get().getHitBox().getBoundingBox(), corner));
+			resizeHandles.add(new ResizeHandle(item.getBoundingBox(), corner));
 		}
 		
 		setupListeners();
@@ -80,7 +80,7 @@ public class ItemSelection implements Renderable, AutoCloseable {
 		g2d.setStroke(new DashedStroke(1, 5));
 		g2d.setColor(Color.GRAY);
 		
-		item.get().getHitBox().getBoundingBox().draw(new SwingGraphics(g2d));
+		item.getBoundingBox().draw(new SwingGraphics(g2d));
 		
 		for (ResizeHandle handle : resizeHandles) {
 			handle.render(g2d, canvasSize);

@@ -4,6 +4,9 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 import fwcd.fructose.EventListenerList;
+import fwcd.fructose.StreamUtils;
+import fwcd.fructose.geometry.Polygon2D;
+import fwcd.fructose.geometry.Rectangle2D;
 import fwcd.fructose.structs.ArrayStack;
 import fwcd.fructose.structs.Stack;
 
@@ -53,12 +56,25 @@ public class BoardItemStack {
 	
 	public void unlisten(Consumer<Iterable<SketchItem>> consumer) { listeners.remove(consumer); }
 	
+	public Rectangle2D getBoundingBox() {
+		if (stack.size() == 1) {
+			return stack.peek().getHitBox().getBoundingBox();
+		} else {
+			return StreamUtils.stream(stack)
+				.map(SketchItem::getHitBox)
+				.map(Polygon2D::getBoundingBox)
+				.reduce(Rectangle2D::merge)
+				.orElseGet(() -> new Rectangle2D(0, 0, 0, 0));
+		}
+	}
+	
 	public void apply(UnaryOperator<SketchItem> mapper) {
 		Stack<SketchItem> newStack = new ArrayStack<>();
 		for (SketchItem item : stack) {
 			newStack.push(mapper.apply(item));
 		}
 		stack = newStack;
+		listeners.fire(stack);
 	}
 	
 	@Override
