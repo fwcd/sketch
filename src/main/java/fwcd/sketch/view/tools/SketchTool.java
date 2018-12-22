@@ -4,10 +4,12 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.function.Consumer;
 
 import javax.swing.ImageIcon;
 
 import fwcd.fructose.geometry.Vector2D;
+import fwcd.sketch.model.items.SketchItem;
 import fwcd.sketch.view.canvas.SketchBoardView;
 
 public interface SketchTool {
@@ -28,4 +30,8 @@ public interface SketchTool {
 	default void onKeyPress(KeyEvent e, SketchBoardView board) {}
 	
 	default Cursor getCursor() { return Cursor.getDefaultCursor(); }
+	
+	default void addAddedPartListener(Consumer<? super SketchItem> listener) {}
+	
+	default void removeAddedPartListener(Consumer<? super SketchItem> listener) {}
 }
