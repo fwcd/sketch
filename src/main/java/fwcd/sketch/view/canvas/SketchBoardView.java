@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import fwcd.fructose.Observable;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.structs.ArrayStack;
 import fwcd.fructose.structs.Stack;
@@ -32,7 +33,7 @@ public class SketchBoardView implements View {
 	private int snapSensivity = 10;
 	private int gridConstant = 30;
 	
-	private SketchTool tool = CommonSketchTool.BRUSH.get();
+	private Observable<SketchTool> tool = new Observable<>(CommonSketchTool.BRUSH.get());
 	private BrushProperties brushProps = new BrushProperties();
 	
 	private Stack<Overlay> overlays = new ArrayStack<>();
@@ -56,25 +57,25 @@ public class SketchBoardView implements View {
 		MouseHandler mouseHandler = new MouseHandler() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				tool.onMouseDown(snappedPos(e), SketchBoardView.this);
+				tool.get().onMouseDown(snappedPos(e), SketchBoardView.this);
 				component.repaint();
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				tool.onMouseUp(snappedPos(e), SketchBoardView.this);
+				tool.get().onMouseUp(snappedPos(e), SketchBoardView.this);
 				component.repaint();
 			}
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				tool.onMouseDrag(snappedPos(e), SketchBoardView.this);
+				tool.get().onMouseDrag(snappedPos(e), SketchBoardView.this);
 				component.repaint();
 			}
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				component.setCursor(tool.getCursor());
+				component.setCursor(tool.get().getCursor());
 			}
 
 			@Override
@@ -85,9 +86,9 @@ public class SketchBoardView implements View {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() <= 1) {
-					tool.onMouseClick(snappedPos(e), SketchBoardView.this);
+					tool.get().onMouseClick(snappedPos(e), SketchBoardView.this);
 				} else {
-					tool.onMouseDoubleClick(snappedPos(e), SketchBoardView.this);
+					tool.get().onMouseDoubleClick(snappedPos(e), SketchBoardView.this);
 				}
 			}
 		};
@@ -95,7 +96,7 @@ public class SketchBoardView implements View {
 		KeyAdapter keyAdapter = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				tool.onKeyPress(e, SketchBoardView.this);
+				tool.get().onKeyPress(e, SketchBoardView.this);
 			}
 		};
 		
@@ -144,7 +145,7 @@ public class SketchBoardView implements View {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		renderModel(g2d, canvasSize);
-		tool.render(g2d, canvasSize, this); // Perform tool-specific rendering
+		tool.get().render(g2d, canvasSize, this); // Perform tool-specific rendering
 		
 		for (Renderable overlay : overlays) {
 			overlay.render(g2d, canvasSize);
@@ -184,12 +185,8 @@ public class SketchBoardView implements View {
 		Overlay overlay = overlays.pop();
 		overlay.dispose();
 	}
-	
-	public void selectTool(SketchTool tool) {
-		this.tool = tool;
-	}
 
-	public SketchTool getSelectedTool() {
+	public Observable<SketchTool> getSelectedTool() {
 		return tool;
 	}
 

@@ -42,7 +42,7 @@ public class SketchPaneView implements View {
 		toolsPane.setFolding(foldMenus);
 		for (CommonSketchTool enumTool : CommonSketchTool.values()) {
 			SketchTool tool = enumTool.get();
-			toolsPane.add(new JButton(tool.getIcon()), () -> board.selectTool(tool));
+			toolsPane.add(new JButton(tool.getIcon()), () -> board.getSelectedTool().set(tool));
 		}
 		toolBar.add(toolsPane.getComponent());
 
