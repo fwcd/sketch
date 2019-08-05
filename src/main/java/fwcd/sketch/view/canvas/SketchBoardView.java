@@ -17,7 +17,7 @@ import fwcd.fructose.structs.Stack;
 import fwcd.fructose.swing.MouseHandler;
 import fwcd.fructose.swing.RenderPanel;
 import fwcd.fructose.swing.Renderable;
-import fwcd.fructose.swing.View;
+import fwcd.fructose.swing.Viewable;
 import fwcd.sketch.model.BrushProperties;
 import fwcd.sketch.model.SketchBoardModel;
 import fwcd.sketch.model.items.BoardItemStack;
@@ -26,7 +26,7 @@ import fwcd.sketch.view.tools.CommonSketchTool;
 import fwcd.sketch.view.tools.SketchTool;
 import fwcd.sketch.view.utils.ListenableRenderable;
 
-public class SketchBoardView implements View {
+public class SketchBoardView implements Viewable {
 	private final JPanel component;
 	private final SketchBoardModel model;
 	

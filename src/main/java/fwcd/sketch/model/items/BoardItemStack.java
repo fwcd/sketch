@@ -4,11 +4,11 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 import fwcd.fructose.EventListenerList;
-import fwcd.fructose.StreamUtils;
 import fwcd.fructose.geometry.Polygon2D;
 import fwcd.fructose.geometry.Rectangle2D;
 import fwcd.fructose.structs.ArrayStack;
 import fwcd.fructose.structs.Stack;
+import fwcd.fructose.util.StreamUtils;
 
 /**
  * A mutable stack of items on the sketch board.

@@ -13,14 +13,14 @@ import javax.swing.JToolBar;
 
 import fwcd.fructose.geometry.Direction;
 import fwcd.fructose.swing.SelectedButtonPanel;
-import fwcd.fructose.swing.View;
+import fwcd.fructose.swing.Viewable;
 import fwcd.sketch.model.SketchBoardModel;
 import fwcd.sketch.view.tools.CommonSketchTool;
 import fwcd.sketch.view.tools.SketchTool;
 import fwcd.sketch.view.utils.ColorButton;
 import fwcd.sketch.view.utils.ListenableRenderable;
 
-public class SketchPaneView implements View {
+public class SketchPaneView implements Viewable {
 	private final JPanel component;
 	
 	private final SketchBoardView board;

@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import fwcd.fructose.StreamUtils;
 import fwcd.fructose.geometry.Rectangle2D;
 import fwcd.fructose.geometry.Vector2D;
 import fwcd.fructose.swing.DashedStroke;
 import fwcd.fructose.swing.Renderable;
 import fwcd.fructose.swing.SwingGraphics;
+import fwcd.fructose.util.StreamUtils;
 import fwcd.sketch.model.items.BoardItemStack;
 import fwcd.sketch.model.items.SketchItem;
 
